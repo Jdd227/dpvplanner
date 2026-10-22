@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="theme-color" content="#101719" />
 <title>RunTime | Lake Washington DPV Planner</title>
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
@@ -68,12 +69,12 @@
  <div id="map" class="map" aria-label="Map of Lake Washington wrecks"></div>
  <div class="map-top">
   <button id="bathySwitch" class="map-action active" aria-pressed="true" title="Toggle NOAA high-resolution bathymetric shaded relief">Bathymetry ON</button>
-  <button id="contourSwitch" class="map-action active" aria-pressed="true" title="Toggle Washington Department of Ecology lake depth contours">Contours ON</button>
+  <button id="contourSwitch" class="map-action" aria-pressed="false" title="Toggle Washington Department of Ecology lake depth contours">Contours OFF</button>
   <button id="mapSwitch" class="map-action">Light map</button>
   <button id="mapWaypoint" class="map-action">+ Pin on map</button>
   <button id="fitRoute" class="map-action">Fit route</button>
  </div>
- <div class="map-legend" id="mapLegend"><strong>Bathymetry</strong> <span id="bathyStatus">NOAA BAG relief</span> &nbsp;·&nbsp; <span id="contourStatus">Ecology contours</span><div class="legend-sub">Relief is based on historic surveys; feature depths are source-reported, not live sonar. <a target="_blank" rel="noopener" href="https://www.ngdc.noaa.gov/nos/H10001-H12000/H11810.html">NOAA survey H11810 ↗</a></div></div>
+ <div class="map-legend" id="mapLegend"><strong>Bathymetry</strong> <span id="bathyStatus">NOAA BAG relief</span> &nbsp;·&nbsp; <span id="contourStatus">Off</span><div class="legend-sub">Relief is based on historic surveys; feature depths are source-reported, not live sonar. <a target="_blank" rel="noopener" href="https://www.ngdc.noaa.gov/nos/H10001-H12000/H11810.html">NOAA survey H11810 ↗</a></div></div>
  <div class="map-footer" id="mapFooter">Select a wreck marker, then choose Add to route. The demo route starts at Diamond Girl and continues to Dawn.</div>
 </main>
 </div>
@@ -106,7 +107,7 @@ if(initial){stops=(initial.stops||[]).filter(s=>finite(Number(s.lat))&&finite(Nu
 $('speed').value=speed;$('returnMode').value=returnMode;$('routeName').value=currentName;
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({stops,speed,returnMode,name:currentName,routes}))}catch(e){console.warn('Local storage unavailable:',e)}}
 let map, wreckLayer, routeLayer, baseLayer, bathyLayer, contourLayer, iconNamed, iconUnknown, iconRoute, markers=new Map();
-let bathyOn=true, contoursOn=true, tileFailCount=0;
+let bathyOn=true, contoursOn=false, tileFailCount=0;
 const REST_NOAA='https://gis.ngdc.noaa.gov/arcgis/rest/services/bag_hillshades_subsets/ImageServer';
 const TILED_NOAA='https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/bag_hillshades/MapServer';
 const REST_ECOLOGY='https://gis.ecology.wa.gov/serverext/rest/services/Authoritative/ECY/MapServer';
@@ -147,6 +148,27 @@ function switchLayer(which){if(!map)return;const bathy=which==='bathy';const lyr
  $(bathy?'bathyStatus':'contourStatus').textContent=value?(bathy?'NOAA shaded seafloor':'Ecology depth contours (if covered)'):'Off';
 }
 
+// Resilient keyless USGS basemap. If an individual USGS tile cannot load,
+// retry that tile from OSM instead of leaving a hole in the map.
+const ResilientTopo = (typeof L !== 'undefined' && L.TileLayer) ? L.TileLayer.extend({
+ createTile(coords,done){
+  const tile=document.createElement('img');
+  tile.alt='';tile.setAttribute('role','presentation');
+  tile.referrerPolicy='strict-origin-when-cross-origin';
+  let usingFallback=false, finished=false;
+  const finish=(error)=>{if(finished)return;finished=true;done(error,tile)};
+  tile.onload=()=>finish(null);
+  tile.onerror=()=>{
+   if(!usingFallback){
+    usingFallback=true;
+    tile.src=`https://tile.openstreetmap.org/${coords.z}/${coords.x}/${coords.y}.png`;
+    // The fallback is per tile, so isolated request failures don't blank the map.
+   }else finish(new Error('USGS and OSM map tiles unavailable'));
+  };
+  tile.src=`https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/${coords.z}/${coords.y}/${coords.x}`;
+  return tile;
+ }
+}):null;
 if(typeof L!=='undefined'){
  map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([47.5231,-122.2549],15);
  L.control.zoom({position:'bottomright'}).addTo(map);
@@ -157,29 +179,26 @@ if(typeof L!=='undefined'){
  map.on('click',ev=>{if(placeMode){const name=`Waypoint ${stops.filter(s=>String(s.id).startsWith('WP-')).length+1}`;append({id:'WP-'+Date.now(),name,lat:ev.latlng.lat,lng:ev.latlng.lng,custom:true});togglePlace(false);switchTab('route');}});
  map.on('moveend',()=>{if($('sort').value==='near')drawResults()});
 }else{$('mapFooter').textContent='Map library failed to load. Confirm that the Leaflet CDN is reachable; no API key is needed. Route calculations remain available.'}
-function setTiles(isLight){if(!map)return;
- // Use the same public OpenStreetMap tiles for both styles. The dark style is
- // a local CSS filter, never a paid tile provider or another map API.
- if(baseLayer)map.removeLayer(baseLayer);
- const url='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
- baseLayer=L.tileLayer(url,{
-   maxZoom:19,
-   className:isLight?'light-basemap':'dark-basemap',
-   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
- });
- const thisLayer=baseLayer;
- let failures=0;
- thisLayer.on('tileerror',()=>{
-   if(thisLayer!==baseLayer)return;
-   if(++failures===4)$('mapFooter').textContent='Map tiles could not be loaded. Check your connection or try again. Wreck coordinates and route calculations remain available.';
- });
- thisLayer.addTo(map);
- // Keep the bathymetry/contour layers above the basemap and preserve their state.
- if(bathyLayer&&map.hasLayer(bathyLayer))bathyLayer.bringToFront();
- if(contourLayer&&map.hasLayer(contourLayer))contourLayer.bringToFront();
+function setTiles(isLight){
+ if(!map||!ResilientTopo)return;
+ // Toggle brightness of existing tiles without discarding and re-requesting them.
+ if(!baseLayer){
+  baseLayer=new ResilientTopo('',{
+   maxZoom:19,maxNativeZoom:16,minZoom:4,keepBuffer:3,
+   updateWhenIdle:true,
+   className:'dark-basemap',
+   attribution:'Base map: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a>; fallback &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+  });
+  let failed=0;
+  baseLayer.on('tileerror',()=>{if(++failed>=3)$('mapFooter').textContent='Some basemap tiles could not load from USGS or OpenStreetMap. Wreck coordinates and route measurements remain available.'});
+  baseLayer.addTo(map);
+ }
+ const container=baseLayer.getContainer();
+ if(container){container.classList.toggle('dark-basemap',!isLight);container.classList.toggle('light-basemap',isLight)}
  light=isLight;
  $('mapSwitch').textContent=light?'Dark map':'Light map';
 }
+
 function isNamed(w){return !/^Unknown(?:-|$)/i.test(w.name)&&w.name!==w.id&&w.name!=='Unknown'}
 function depthFt(w){return finite(w.depth)&&w.depth!==0?Math.round(Math.abs(w.depth)*3.280839895):null}
 function renderMarkers(){if(!map)return;wreckLayer.clearLayers();markers.clear();const filter=$('filter').value;let rendered=0;for(const w of all){if(filter==='named'&&!isNamed(w)||filter==='explored'&&w.explored!=='YES')continue;const marker=L.marker([w.lat,w.lng],{icon:isNamed(w)?iconNamed:iconUnknown,title:`${w.name} (${w.id})`,keyboard:true});marker.bindPopup(()=>popup(w));marker.addTo(wreckLayer);markers.set(w.id,marker);rendered++}$('resultSummary').textContent=`${rendered} markers displayed · ${all.length} in source`}
