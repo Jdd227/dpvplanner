@@ -1,15 +1,18 @@
-# RunTime DPV Planner (v5 rebuild)
+# RunTime DPV Planner V7
 
-Deploy the included `index.html` on GitHub Pages (`main` / root). The `CNAME` matches the existing DNS configuration. Do not change GoDaddy DNS.
+Based on the working V6 map and Archie’s wreck markers and bathymetry. Adds a custom shore-entry or boat-drop starting point.
 
-### Data and map
-- Wreck markers: Archie’s live JSON file at `archisgore/dive-site-markers` (plus a seven-wreck fallback).
-- Bathymetry: Archie’s **exact Lake Washington** TMS PNG tiles, repository `archisgore/lake-washington-bathymetry` (CC0). Leaflet `tms: true` is necessary because the tiles are Y-inverted relative to XYZ.
-- Street basemap: public OpenStreetMap tiles (attribution present). Archie’s Google streets tiles are not embedded/reused; they require a licensed API key for independent Google Maps use.
-- Front end: Leaflet and plain HTML/CSS/JS. No API keys or build.
+## Set a starting point
+1. Open the Route tab.
+2. Choose **+ Shore entry** or **+ Boat drop**.
+3. Enter a name (optional).
+4. Click/tap the map to place the start, OR enter latitude and longitude and select **Use GPS coordinates**.
+5. The marker becomes waypoint 1 and existing wrecks move after it. To relocate it, select **Move** beside waypoint 1. Rename it with the inline name field.
+6. Save route or export GPX/CSV as usual.
 
-### Controls
-Click a marker or a wreck in the left list to see its details. Add to route. Turn Draw route ON to select a sequence of wrecks or place a custom waypoint by clicking open water. The route line, segment distance, bearing (TRUE) and travel time appear instantly. Routes can be saved locally or exported to GPX and CSV.
+The map toolbar **+ Start point** is a shortcut to shore-entry placement. Shore and boat starts render as distinct S/B markers. A new start replaces an existing shore/boat start rather than adding duplicates.
 
-### Safety/data
-Archie’s markers and reported depths are not verified positions. Route distances are horizontal and times exclude depth changes, currents, hazards, and search time. Does not replace dive or gas planning.
+## Deploy
+Replace only `index.html` in `Jdd227/dpvplanner` on the main branch and commit. Do not alter CNAME or GitHub Pages settings. The included CNAME is provided for clean new deployments, but is not needed for this update.
+
+Map/dataset sources and attributions: Archie’s `archisgore/ScubaDiveMap`, `archisgore/lake-washington-bathymetry` (CC0) and `archisgore/dive-site-markers` (GPLv3). Historical wreck coordinates and bathymetry are not verified underwater navigation fixes.

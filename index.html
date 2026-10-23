@@ -34,13 +34,24 @@
 .mapinfo{max-width:258px}.mapinfo .ok{color:#76edc4}.mapinfo .fail{color:#ffb984}.mapinfo a{font-weight:700}
 #mapMessage{pointer-events:none}
 @media(max-width:840px){.zoomCtrls{bottom:65px;right:8px}}
+.start-panel{padding:11px 12px;margin:13px 0 15px;border:1px solid #55776a;border-radius:12px;background:#1d3539}
+.start-panel .helper{margin:5px 0 8px}.start-title{font-size:13px;font-weight:850;color:#d8fff1;display:flex;align-items:center;gap:10px}
+.start-panel .group{margin:8px 0}.start-guide{border-top:1px solid #385e5a;margin-top:11px;padding-top:11px}.start-guide[hidden]{display:none}
+.start-guide strong{color:var(--mint)}.start-guide .two{margin:8px 0}
+#map.placing-start{cursor:crosshair}
+.pin-marker.start-marker{width:29px;height:29px;border:2px solid #122e35;box-shadow:0 0 0 2px #fff6c0;background:#ffe3a2;color:#103237;display:grid;place-items:center;font-size:15px;font-weight:950;z-index:39}
+.pin-marker.start-marker.boat{background:#bce4ff;box-shadow:0 0 0 2px #bce4ff}
+.start-row .index{background:#8b6733;color:#fff4d4}.start-row .legtitle{color:#ffe0a1}
+.start-gps{font-size:11px;color:#a9c7c7;margin:5px 0 3px 34px;font-variant-numeric:tabular-nums}
+.start-edit{display:flex;gap:6px;align-items:center;margin:8px 0 3px 34px}.start-edit .input{min-width:0;flex:1;padding:6px 7px;min-height:33px}.start-edit .legbtn{min-height:33px}
+
 
 </style>
 </head>
 <body>
 <div id="app">
  <aside class="side">
-  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V6</div><h1>Lake Washington DPV Planner</h1><p class="lead">Archie's wreck locations + his lake bathymetry · measured DPV legs</p><div id="dataStatus" class="status" role="status">Loading Archie’s wreck markers…</div></header>
+  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V7</div><h1>Lake Washington DPV Planner</h1><p class="lead">Archie's wreck locations + his lake bathymetry · measured DPV legs</p><div id="dataStatus" class="status" role="status">Loading Archie’s wreck markers…</div></header>
   <div class="tabs"><button class="tab active" id="tabExplore">Explore wrecks</button><button class="tab" id="tabRoute">Route <span id="routeCount">(0)</span></button></div>
   <div class="body">
    <section class="pane active" id="explorePane">
@@ -56,9 +67,21 @@
    </section>
    <section class="pane" id="routePane">
     <label for="routeName" class="label">Route name</label><input class="input" id="routeName" value="Lake Washington DPV route">
+    <div class="start-panel">
+      <div class="start-title">Starting location <span class="pill">Waypoint 1</span></div>
+      <p class="helper">Mark your shore entry or boat drop. It becomes the first waypoint and all legs recalculate.</p>
+      <div class="group"><button id="shoreStart" class="btn primary" type="button">+ Shore entry</button><button id="boatStart" class="btn primary" type="button">+ Boat drop</button></div>
+      <div id="startGuide" class="start-guide" hidden>
+        <strong id="startGuideTitle">Click map to place starting point</strong>
+        <p id="startHint" class="helper">Click or tap the location on the map, or enter GPS coordinates.</p>
+        <label for="startName" class="label">Point name</label><input class="input" id="startName" maxlength="65" value="Shore entry" placeholder="Example: Pritchard Island entry">
+        <div class="two"><div><label for="startLat" class="label">Latitude</label><input id="startLat" class="input" type="number" step="any" placeholder="47.523426"></div><div><label for="startLng" class="label">Longitude</label><input id="startLng" class="input" type="number" step="any" placeholder="-122.257050"></div></div>
+        <div class="group"><button class="btn primary" id="startFromGPS" type="button">Use GPS coordinates</button><button class="btn" id="cancelStart" type="button">Cancel placement</button></div>
+      </div>
+    </div>
     <div class="two"><div><label for="speed" class="label">Speed (ft/min)</label><input class="input" id="speed" type="number" min="20" max="800" step="5" value="175"></div><div><label for="reserve" class="label">Extra time / stop (min)</label><input class="input" id="reserve" type="number" min="0" max="120" step="1" value="0"></div></div>
     <div class="metricgrid"><div class="metric"><label>Total distance</label><strong id="totalDist">0 ft</strong></div><div class="metric"><label>Transit time</label><strong id="totalTime">0:00</strong></div><div class="metric"><label>Legs</label><strong id="totalLegs">0</strong></div><div class="metric"><label>With stop allowance</label><strong id="withStops">0:00</strong></div></div>
-    <p class="helper">Select wreck markers in order to draw the route. In Draw mode, click open water to place a custom waypoint.</p>
+    <p class="helper">Select wreck markers to add legs. Draw mode also lets you add extra waypoints by tapping the map. For a dedicated starting point, use Shore entry or Boat drop above.</p>
     <div class="group"><button id="drawRoute" class="btn primary">Draw route: OFF</button><button id="undo" class="btn">Undo last</button><button id="reverse" class="btn">Reverse</button><button id="clear" class="btn danger">Clear route</button></div>
     <div id="stops"></div>
     <hr class="sep"><div class="group"><button class="btn" id="saveRoute">Save route</button><button class="btn" id="loadRoute">Load saved</button><button class="btn" id="downloadGPX">Export GPX</button><button class="btn" id="downloadCSV">Export CSV</button></div>
@@ -69,12 +92,12 @@
  <main class="mapwrap" aria-label="Map and wrecks">
   <div id="map"><div id="world"></div><div class="zoomCtrls"><button id="zoomIn" title="Zoom in">+</button><button id="zoomOut" title="Zoom out">−</button></div><div class="credits">Base: © OpenStreetMap / Esri · Lake bathymetry: Archie</div></div>
   <div class="mapinfo"><strong>Archie’s Lake Washington bathymetry</strong><div id="mapStatus">Loading map tiles…</div><div style="margin-top:5px"><a id="testTile" target="_blank" rel="noopener" href="https://raw.githubusercontent.com/archisgore/lake-washington-bathymetry/master/tiles/15/5255/21312.png">Test actual bathymetry tile ↗</a></div></div>
-  <div class="mapcontrols"><button id="bathy" class="mapbtn active" aria-pressed="true">Bathymetry ON</button><button id="basemap" class="mapbtn active" aria-pressed="true">Streets ON</button><button id="draw" class="mapbtn" aria-pressed="false">Draw route OFF</button><button id="fit" class="mapbtn">Fit route</button></div>
+  <div class="mapcontrols"><button id="bathy" class="mapbtn active" aria-pressed="true">Bathymetry ON</button><button id="basemap" class="mapbtn active" aria-pressed="true">Streets ON</button><button id="startOnMap" class="mapbtn" title="Mark a shore entry point">+ Start point</button><button id="draw" class="mapbtn" aria-pressed="false">Draw route OFF</button><button id="fit" class="mapbtn">Fit route</button></div>
   <div class="mapnote" id="mapMessage" role="status">Click a wreck for its details. Enable Draw route to connect wrecks in sequence.</div>
  </main>
 </div>
 <script>
-/* RunTime DPV Planner v6 — fresh DOM/SVG map engine based on the coordinate/overlay scheme in
+/* RunTime DPV Planner v7 — fresh DOM/SVG map engine based on the coordinate/overlay scheme in
  * https://github.com/archisgore/ScubaDiveMap and his lake-washington-bathymetry tiles.
  * AGPLv3 source attribution and repo URLs provided in README. */
 (()=>{'use strict';
@@ -99,11 +122,37 @@ const fallback=[
  {id:'LW273',name:'Alantic City Scow',lat:47.525307,lng:-122.252068,depth:-33.8,explored:'YES'},
  {id:'LW583',name:'City Of Blaine',lat:47.526367,lng:-122.251633,depth:-34.6,explored:'YES'}
 ];
-let catalog=fallback.map(norm), route=[], current=null, draw=false, showBathy=true, showBase=true;
+let catalog=fallback.map(norm), route=[], current=null, draw=false, showBathy=true, showBase=true, startMode=null;
 let center={lat:47.5233,lng:-122.2547},zoom=15, tileNodes=new Map(), run=0,pan=null,loaded={base:0,bathy:0,baseFailed:0,bathyFailed:0};
 const world=$('world'),canvas=$('map');
 function norm(w){return {...w,id:String(w.id),name:String(w.name||w.id),lat:Number(w.lat),lng:Number(w.lng),depth:w.depth==null?NaN:Number(w.depth)};}
 function display(w){return String(w?.name||w?.id||'Waypoint').replace(/<[^>]*>/g,'').trim();}
+function isStart(w){return w?.kind==='shore'||w?.kind==='boat';}
+function startDefault(k){return k==='boat'?'Boat drop':'Shore entry';}
+function finishStart(){startMode=null;$('startGuide').hidden=true;$('startOnMap').classList.remove('active');$('startOnMap').textContent='+ Start point';$('shoreStart').classList.remove('active');$('boatStart').classList.remove('active');canvas.classList.remove('placing-start');}
+function beginStart(kind){
+ if(startMode===kind){finishStart();notify('Start-point placement cancelled.');return;}
+ if(draw)drawState(false);
+ startMode=kind;
+ const previous=isStart(route[0])?route[0]:null;
+ $('startName').value=previous&&previous.kind===kind?display(previous):startDefault(kind);
+ $('startLat').value='';$('startLng').value='';
+ $('startGuideTitle').textContent='Tap or click map to place '+(kind==='boat'?'boat drop':'shore entry');
+ $('startHint').textContent='Tap the location on the map. You can also enter GPS coordinates below.';
+ $('startGuide').hidden=false;$('shoreStart').classList.toggle('active',kind==='shore');$('boatStart').classList.toggle('active',kind==='boat');
+ $('startOnMap').classList.add('active');$('startOnMap').textContent='Cancel start';canvas.classList.add('placing-start');
+ switchTab('route');notify('Place '+startDefault(kind)+' by clicking the map, or enter latitude and longitude.');
+}
+function placeStart(lat,lng){
+ if(!startMode)return;
+ lat=Number(lat);lng=Number(lng);
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat < -90||lat > 90||lng < -180||lng > 180){$('startHint').textContent='Invalid coordinates. Enter latitude between -90 and 90 and longitude between -180 and 180.';notify('Invalid starting-point coordinates.');return;}
+ const name=$('startName').value.trim()||startDefault(startMode),kind=startMode;
+ const p={id:'START-'+kind.toUpperCase()+'-'+Date.now(),name,kind,lat,lng,depth:NaN};
+ if(isStart(route[0]))route[0]=p;else route.unshift(p);
+ finishStart();drawRoute();switchTab('route');notify(name+' set as waypoint 1. Route distances and times updated.');
+}
+
 function clean(v){return String(v??'').replace(/<[^>]*>/g,'').replace(/undefined/gi,'').trim();}
 function isNamed(w){return !/^Unknown(?:-|$)/i.test(w.name)&&w.name!==w.id&&w.name!=='Unknown';}
 function rad(x){return x*Math.PI/180;}
@@ -147,7 +196,15 @@ function renderGraphics(){world.querySelectorAll('.geometry,.pin-marker,.line-la
  for(let i=1;i<route.length;i++){let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;if(x<-100||x>w+100||y<-50||y>h+50)continue;let label=create('div','line-label',feet(dist(route[i-1],route[i]))+' · '+tm(dist(route[i-1],route[i])/speed()));label.style.left=x+'px';label.style.top=y+'px';world.appendChild(label);}}
  let routed=new Set(route.map(x=>x.id));
  for(const p of catalog){const a=project(p);if(a.x<-30||a.y<-30||a.x>w+30||a.y>h+30)continue;let button=create('button','pin-marker'+(isNamed(p)?' named':'')+(routed.has(p.id)?' stop':'')+(current?.id===p.id?' active':''));button.title=display(p)+' · '+p.id+' · '+depth(p);button.setAttribute('aria-label',button.title);button.style.left=a.x+'px';button.style.top=a.y+'px';button.dataset.wreckId=p.id;button.addEventListener('click',e=>{e.stopPropagation();if(draw){add(p);}else{choose(p,false);}});world.appendChild(button);}
- for(let i=0;i<route.length;i++){let a=project(route[i]);if(a.x<-20||a.y<-20||a.x>w+20||a.y>h+20)continue;if(String(route[i].id).startsWith('WP-')){let dot=create('button','pin-marker stop');dot.title=display(route[i]);dot.style.left=a.x+'px';dot.style.top=a.y+'px';dot.addEventListener('click',e=>{e.stopPropagation();choose(route[i],false);});world.append(dot);}let label=create('div','point-label',String(i+1)+' '+display(route[i]));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);}
+ for(let i=0;i<route.length;i++){
+ let p=route[i],a=project(p);if(a.x<-20||a.y<-20||a.x>w+20||a.y>h+20)continue;
+ if(String(p.id).startsWith('WP-')||isStart(p)){
+  const start=isStart(p),dot=create('button',start?'pin-marker start-marker '+p.kind:'pin-marker stop',start?(p.kind==='boat'?'B':'S'):'');
+  dot.title=display(p)+' · '+p.lat.toFixed(6)+', '+p.lng.toFixed(6);dot.setAttribute('aria-label',dot.title);dot.style.left=a.x+'px';dot.style.top=a.y+'px';
+  dot.addEventListener('click',e=>{e.stopPropagation();if(start){switchTab('route');notify('Start point selected. Rename it in the Route list or choose Move.');}else choose(p,false);});world.append(dot);
+ }
+ let label=create('div','point-label',String(i+1)+' '+display(p));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);
+}
 }
 function refresh(){renderTiles();}
 function switchTab(tab){let r=tab==='route';$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;}
@@ -157,18 +214,25 @@ function choose(w,fly=true){current=w;$('feature').classList.add('show');$('feat
 function drawList(){let term=$('search').value.toLowerCase().trim(),filter=$('filter').value,sort=$('sort').value;let rows=catalog.filter(w=>(!term||(display(w)+' '+w.id+' '+clean(w.alias)+' '+clean(w.desc)).toLowerCase().includes(term))&&(filter!=='named'||isNamed(w))&&(filter!=='explored'||w.explored==='YES'));
  if(sort==='name')rows.sort((a,b)=>display(a).localeCompare(display(b)));else if(sort==='depth')rows.sort((a,b)=>(Math.abs(a.depth)||999)-(Math.abs(b.depth)||999));else rows.sort((a,b)=>dist(a,center)-dist(b,center));
  $('resultCount').textContent=`${rows.length} matching markers · ${catalog.length} loaded · showing ${Math.min(80,rows.length)}`;$('wreckList').replaceChildren();rows.slice(0,80).forEach(p=>{let li=create('div','wreck'+(current?.id===p.id?' active':''));let b=create('button','link');b.append(create('strong','',display(p)),create('span','',p.id+' · '+depth(p)));b.addEventListener('click',()=>choose(p));let addBtn=create('button','add','+ Add');addBtn.addEventListener('click',()=>add(p));li.append(b,addBtn);$('wreckList').appendChild(li);});}
-function add(w){route.push({...w});drawRoute();switchTab('route');notify(display(w)+' added. '+route.length+' stops, '+Math.max(0,route.length-1)+' connected legs.');}
+function add(w){if(startMode){notify('Place or cancel the starting point before adding wrecks.');return;}route.push({...w});drawRoute();switchTab('route');notify(display(w)+' added. '+route.length+' stops, '+Math.max(0,route.length-1)+' connected legs.');}
 function drawRoute(){let list=$('stops');list.replaceChildren();$('routeCount').textContent='('+route.length+')';let distance=0;if(!route.length)list.append(create('p','helper','Click + Add beside a wreck, or enable Draw route and click consecutive wreck markers.'));
- route.forEach((w,i)=>{let row=create('div','leg'),top=create('div','leghead');top.append(create('span','index',String(i+1)),create('span','legtitle',display(w)));let rm=create('button','legbtn','×');rm.title='Remove stop';rm.onclick=()=>{route.splice(i,1);drawRoute();};top.append(rm);row.append(top);
+ route.forEach((w,i)=>{let row=create('div','leg'+(isStart(w)?' start-row':'')),top=create('div','leghead');top.append(create('span','index',String(i+1)),create('span','legtitle',display(w)));let rm=create('button','legbtn','×');rm.title='Remove stop';rm.onclick=()=>{route.splice(i,1);drawRoute();};top.append(rm);row.append(top);
+ if(isStart(w)){
+  const gps=create('div','start-gps',(w.kind==='boat'?'Boat drop · ':'Shore entry · ')+w.lat.toFixed(6)+', '+w.lng.toFixed(6));row.append(gps);
+  const edit=create('div','start-edit'),nameInput=create('input','input');nameInput.value=display(w);nameInput.maxLength=65;nameInput.setAttribute('aria-label','Rename starting point');nameInput.title='Edit starting-point name';
+  nameInput.addEventListener('change',()=>{w.name=nameInput.value.trim()||startDefault(w.kind);drawRoute();});
+  const move=create('button','legbtn','Move');move.type='button';move.title='Place this starting point at a new location';move.addEventListener('click',()=>beginStart(w.kind));
+  edit.append(nameInput,move);row.append(edit);
+ }
  if(i){let d=dist(route[i-1],w);distance+=d;row.append(create('div','legsub',feet(d)+' · '+bearing(route[i-1],w).toFixed(0)+'° TRUE · '+tm(d/speed())));}else row.append(create('div','legsub','Starting waypoint'));list.append(row);});
  $('totalDist').textContent=feet(distance);$('totalTime').textContent=tm(distance/speed());$('totalLegs').textContent=Math.max(0,route.length-1);$('withStops').textContent=tm(distance/speed()+extra()*Math.max(0,route.length-1));renderGraphics();}
-function drawState(on){draw=on;for(let k of ['draw','drawRoute']){let b=$(k);b.classList.toggle('active',draw);b.textContent='Draw route '+(draw?'ON':'OFF');b.setAttribute('aria-pressed',String(draw));}notify(draw?'Draw ON: click wreck markers in sequence, or click water to add a waypoint.':'Draw OFF: click any wreck to view its details.');}
+function drawState(on){if(on&&startMode)finishStart();draw=on;for(let k of ['draw','drawRoute']){let b=$(k);b.classList.toggle('active',draw);b.textContent='Draw route '+(draw?'ON':'OFF');b.setAttribute('aria-pressed',String(draw));}notify(draw?'Draw ON: click wreck markers in sequence, or click water to add a waypoint.':'Draw OFF: click any wreck to view its details.');}
 function zoomTo(z){if(z===zoom||z<9||z>19)return;zoom=z;refresh();}
 function fit(){if(route.length===0){center={lat:47.6265,lng:-122.2948};zoom=11;}else if(route.length===1){center={lat:route[0].lat,lng:route[0].lng};zoom=16;}else{let n=Math.min(...route.map(w=>w.lat)),s=Math.max(...route.map(w=>w.lat)),e=Math.max(...route.map(w=>w.lng)),w=Math.min(...route.map(w=>w.lng));center={lat:(n+s)/2,lng:(e+w)/2};zoom=16;for(let z=19;z>=9;z--){zoom=z;let pts=route.map(project);if(pts.every(p=>p.x>80&&p.x<canvas.clientWidth-80&&p.y>80&&p.y<canvas.clientHeight-80))break;}}refresh();}
 function saveFile(name,text,mime){let u=URL.createObjectURL(new Blob([text],{type:mime})),a=create('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
 function escapeXml(v){return String(v||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
 function fileName(){return $('routeName').value.replace(/[^a-zA-Z0-9-]/g,'-').slice(0,60)||'DPV-Route';}
-function csv(){let out=['Order,Wreck,ID,Lat,Lon,Depth_ft,Leg_ft,Bearing_TRUE,Leg_minutes'];route.forEach((p,i)=>{let a=route[i-1],d=a?dist(a,p):0;out.push([i+1,'"'+display(p).replaceAll('"','""')+'"',p.id,p.lat,p.lng,Number.isFinite(p.depth)?Math.round(Math.abs(p.depth)*FTM):'',Math.round(d),a?bearing(a,p).toFixed(0):'',(d/speed()).toFixed(2)].join(','));});saveFile(fileName()+'.csv',out.join('\n'),'text/csv');}
+function csv(){let out=['Order,Point_type,Name,ID,Lat,Lon,Depth_ft,Leg_ft,Bearing_TRUE,Leg_minutes'];route.forEach((p,i)=>{let a=route[i-1],d=a?dist(a,p):0;out.push([i+1,isStart(p)?p.kind:(String(p.id).startsWith('WP-')?'custom':'wreck'),'"'+display(p).replaceAll('"','""')+'"',p.id,p.lat,p.lng,Number.isFinite(p.depth)?Math.round(Math.abs(p.depth)*FTM):'',Math.round(d),a?bearing(a,p).toFixed(0):'',(d/speed()).toFixed(2)].join(','));});saveFile(fileName()+'.csv',out.join('\n'),'text/csv');}
 function gpx(){let items=route.map(p=>`<rtept lat="${p.lat}" lon="${p.lng}"><name>${escapeXml(display(p))}</name><desc>${escapeXml(p.id)}</desc></rtept>`).join('\n');saveFile(fileName()+'.gpx',`<?xml version="1.0"?><gpx version="1.1" creator="RunTime DPV" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>${escapeXml($('routeName').value)}</name>${items}</rte></gpx>`,'application/gpx+xml');}
 async function loadCatalog(){try{let old=JSON.parse(localStorage.getItem(DBKEY)||'null');if(Array.isArray(old)&&old.length>150){catalog=old.map(norm);$('dataStatus').textContent=catalog.length+' cached wrecks from Archie';renderGraphics();drawList();}}catch(e){}
  try{let resp=await fetch(MARKERS,{cache:'no-store'});if(!resp.ok)throw Error('HTTP '+resp.status);let json=await resp.json();let a=json.wpt.filter(p=>String(p.id).startsWith('LW')).map(norm).filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lng));if(a.length<150)throw Error('Incomplete catalog');catalog=a;try{localStorage.setItem(DBKEY,JSON.stringify(a));}catch(e){}$('dataStatus').textContent=catalog.length+' Lake Washington markers loaded from Archie';renderGraphics();drawList();}catch(err){$('dataStatus').textContent=catalog.length+' markers available · source offline';notify('Could not update marker database. Showing bundled or cached wrecks.');}}
@@ -177,6 +241,13 @@ function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']]
  $('diamond').onclick=()=>{center={lat:47.5233,lng:-122.2547};zoom=16;refresh();drawList();};$('entire').onclick=()=>{center={lat:47.6265,lng:-122.2948};zoom=11;refresh();drawList();};$('refresh').onclick=loadCatalog;
  $('featureAdd').onclick=()=>{if(current)add(current);};$('featureZoom').onclick=()=>{if(current){center={lat:current.lat,lng:current.lng};zoom=17;refresh();}};
  $('zoomIn').onclick=()=>zoomTo(zoom+1);$('zoomOut').onclick=()=>zoomTo(zoom-1);$('draw').onclick=()=>drawState(!draw);$('drawRoute').onclick=()=>drawState(!draw);$('fit').onclick=fit;
+ $('shoreStart').onclick=()=>beginStart('shore');$('boatStart').onclick=()=>beginStart('boat');$('startOnMap').onclick=()=>{if(startMode){finishStart();notify('Start-point placement cancelled.');}else beginStart('shore');};
+ $('cancelStart').onclick=()=>{finishStart();notify('Start-point placement cancelled.');};
+ $('startFromGPS').onclick=()=>{
+  const lat=$('startLat').value.trim(),lng=$('startLng').value.trim();
+  if(!lat||!lng){$('startHint').textContent='Both latitude and longitude are required.';notify('Enter both coordinates first.');return;}
+  placeStart(lat,lng);
+ };
  $('bathy').onclick=()=>{showBathy=!showBathy;let b=$('bathy');b.classList.toggle('active',showBathy);b.textContent='Bathymetry '+(showBathy?'ON':'OFF');b.setAttribute('aria-pressed',String(showBathy));refresh();};
  $('basemap').onclick=()=>{showBase=!showBase;let b=$('basemap');b.classList.toggle('active',showBase);b.textContent='Streets '+(showBase?'ON':'OFF');b.setAttribute('aria-pressed',String(showBase));refresh();};
  $('speed').oninput=drawRoute;$('reserve').oninput=drawRoute;$('undo').onclick=()=>{route.pop();drawRoute();};$('reverse').onclick=()=>{route.reverse();drawRoute();};$('clear').onclick=()=>{route=[];drawRoute();};
@@ -186,12 +257,14 @@ function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']]
  let position=null,moved=false;
  canvas.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;position={x:e.clientX,y:e.clientY,from:tileXY(center.lat,center.lng,zoom)};moved=false;canvas.classList.add('dragging');canvas.setPointerCapture(e.pointerId);});
  canvas.addEventListener('pointermove',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;world.style.transform=`translate(${dx}px,${dy}px)`;});
- canvas.addEventListener('pointerup',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;let wasMoved=moved;let orig=position;position=null;canvas.classList.remove('dragging');world.style.transform='';if(wasMoved){center=latLng(orig.from.x-dx,orig.from.y-dy,zoom);refresh();drawList();}else if(draw&&!e.target.closest('button,a')){let rect=canvas.getBoundingClientRect();let p=unproject(e.clientX-rect.left,e.clientY-rect.top);add({id:'WP-'+Date.now(),name:'Waypoint '+(route.filter(w=>w.id.startsWith('WP-')).length+1),lat:p.lat,lng:p.lng,depth:NaN});}try{canvas.releasePointerCapture(e.pointerId)}catch(err){};});
+ canvas.addEventListener('pointerup',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;let wasMoved=moved;let orig=position;position=null;canvas.classList.remove('dragging');world.style.transform='';if(wasMoved){center=latLng(orig.from.x-dx,orig.from.y-dy,zoom);refresh();drawList();}else if(startMode&&!e.target.closest('button,a')){
+ let rect=canvas.getBoundingClientRect(),p=unproject(e.clientX-rect.left,e.clientY-rect.top);placeStart(p.lat,p.lng);
+}else if(draw&&!e.target.closest('button,a')){let rect=canvas.getBoundingClientRect();let p=unproject(e.clientX-rect.left,e.clientY-rect.top);add({id:'WP-'+Date.now(),name:'Waypoint '+(route.filter(w=>w.id.startsWith('WP-')).length+1),lat:p.lat,lng:p.lng,depth:NaN});}try{canvas.releasePointerCapture(e.pointerId)}catch(err){};});
  canvas.addEventListener('pointercancel',()=>{position=null;canvas.classList.remove('dragging');world.style.transform='';});
  canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTo(zoom+(e.deltaY<0?1:-1));},{passive:false});
  window.addEventListener('resize',()=>{clearTimeout(window.__resizeMap);window.__resizeMap=setTimeout(refresh,160);});
  }
 wire();refresh();drawList();drawRoute();loadCatalog();
-window.__dpvV6={dist,bearing,add,choose,route:()=>route,center:()=>center,zoom:()=>zoom,refresh,showBathy:()=>showBathy,loadCatalog};
+window.__dpvV7={dist,bearing,add,choose,route:()=>route,center:()=>center,zoom:()=>zoom,refresh,showBathy:()=>showBathy,loadCatalog,beginStart,placeStart};
 })();
 </script></body></html>
