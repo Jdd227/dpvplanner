@@ -10,12 +10,37 @@
 :root{color-scheme:dark;--bg:#0d191e;--panel:#14242a;--edge:#345158;--ink:#eff9f7;--muted:#a5bdbd;--mint:#70e0bd;--gold:#f7c778;--alert:#ffba80;--water:#284955}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--mint);outline-offset:2px}button:disabled{opacity:.35;cursor:not-allowed}a{color:var(--mint)}
 #app{display:grid;grid-template-columns:min(390px,36vw) minmax(0,1fr);height:100vh;height:100dvh;min-height:360px}.side{background:var(--panel);border-right:1px solid var(--edge);display:flex;flex-direction:column;min-height:0;z-index:900}.head{padding:17px 18px 14px;border-bottom:1px solid var(--edge)}.over{color:var(--mint);font-size:10px;letter-spacing:.17em;font-weight:850}h1{font-size:23px;line-height:1.2;margin:7px 0 5px;letter-spacing:-.65px}.lead{margin:0;color:var(--muted);font-size:12px}.status{color:var(--mint);font-size:11px;margin-top:9px;font-weight:720}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px}.tab{background:#1a3035;border:1px solid var(--edge);padding:10px;color:var(--ink);border-radius:10px;font-weight:750}.tab.active{border-color:var(--mint);background:#274841}.body{overflow:auto;min-height:0;flex:1;padding:0 14px 28px}.pane{display:none}.pane.active{display:block}.label{display:block;font-size:11px;font-weight:780;letter-spacing:.06em;color:var(--muted);margin:11px 0 6px;text-transform:uppercase}.input{width:100%;padding:10px 11px;background:#0e1c21;border:1px solid var(--edge);border-radius:9px;color:var(--ink);min-height:41px}.pill{display:inline-block;border:1px solid #4c6568;padding:2px 7px;border-radius:999px;font-size:10px;color:var(--muted)}.filters,.group{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.btn{border:1px solid #47646c;background:#21363b;color:var(--ink);border-radius:9px;padding:9px 11px;font-weight:740}.btn:hover,.tab:hover{border-color:var(--mint)}.btn.primary{background:#2b6155;border-color:var(--mint);color:#dffaf1}.btn.danger{color:#ffd0b9}.small{font-size:11px}.helper{font-size:12px;color:var(--muted);margin:10px 0}.wrecklist{display:flex;flex-direction:column;gap:6px;margin-top:10px}.wreck{display:flex;gap:8px;align-items:center;border:1px solid var(--edge);border-radius:11px;padding:10px;background:#1b3036}.wreck .link{border:0;background:none;text-align:left;color:var(--ink);padding:0;min-width:0;flex:1}.wreck .link strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wreck .link span{display:block;color:var(--muted);font-size:11px}.wreck.active{border-color:var(--gold)}.add{color:var(--mint);background:#21483f;border:1px solid #4e8c78;border-radius:8px;padding:8px 10px;font-weight:800;min-width:62px}.feature{margin:13px 0;border:1px solid #5a726e;border-radius:12px;background:#1a3035;padding:12px;display:none}.feature.show{display:block}.feature h2{font-size:18px;margin:0 0 5px}.feature .sub{font-size:11px;color:var(--gold)}.feature p{margin:8px 0 11px;font-size:12px;color:#cfdfd9}.details{display:grid;grid-template-columns:110px 1fr;gap:7px;font-size:11px;padding-top:9px;border-top:1px solid var(--edge)}.details span:nth-child(odd){color:var(--muted)}.feature .buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.metricgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.metric{padding:11px;border:1px solid var(--edge);border-radius:10px;background:#20343a}.metric label{font-size:10px;color:var(--muted);display:block;text-transform:uppercase;font-weight:800}.metric strong{font-size:22px;font-variant-numeric:tabular-nums}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.leg{border:1px solid var(--edge);border-radius:10px;background:#1b3035;margin:8px 0;padding:11px}.leghead{display:flex;align-items:center;gap:8px}.index{background:#31564f;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;color:var(--mint);font-weight:850;flex:none}.legtitle{font-weight:790;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.legsub{margin:5px 0 0 34px;font-size:12px;color:#bee0d6}.legbtn{background:#263e44;border:1px solid #45646a;border-radius:7px;color:var(--ink);padding:4px 9px}.sep{border:0;border-top:1px solid var(--edge);margin:17px 0}.notice{font-size:11px;color:#e7c792;padding:10px 0}.mapwrap{position:relative;min-height:0;background:#273f4a}#map{position:absolute;inset:0;background:var(--water)}.mapcontrols{position:absolute;z-index:610;top:13px;right:13px;display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;max-width:min(650px,90%)}.mapbtn{border:1px solid #567177;border-radius:10px;background:#12252bef;color:var(--ink);padding:10px 12px;font-weight:790;box-shadow:0 2px 12px #0007}.mapbtn.active{border-color:var(--mint);color:var(--mint);background:#24463eef}.mapbtn:focus-visible{outline-color:#fff}.mapnote{position:absolute;z-index:605;bottom:31px;left:12px;background:#11262de6;padding:9px 12px;border:1px solid var(--edge);border-radius:9px;font-size:11px;color:#c8d6d5;max-width:min(520px,88%)}.mapinfo{position:absolute;z-index:606;top:12px;left:12px;background:#11262de9;padding:10px 12px;border:1px solid var(--edge);border-radius:9px;max-width:240px;font-size:11px;color:var(--muted)}.mapinfo strong{color:var(--mint)}.pin{width:14px;height:14px;border-radius:50%;border:2px solid #102025;background:#93aec0;box-shadow:0 0 0 1px #d1dae0}.pin.named{background:var(--gold);box-shadow:0 0 0 1px var(--gold)}.pin.selected{width:19px;height:19px;background:var(--mint);box-shadow:0 0 0 2px var(--mint)}.leaflet-div-icon{border:0;background:none}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#192d33;color:var(--ink)}.leaflet-control-attribution{font-size:10px!important}.route-label{font-size:11px;font-weight:850;color:#072b23;background:#92f5d2;padding:2px 6px;border-radius:7px;white-space:nowrap;box-shadow:0 1px 8px #0006}.leaflet-tooltip.route-tooltip{padding:0;border:0;background:transparent;box-shadow:none}.route-tooltip:before{display:none}.leaflet-top.leaflet-left{margin-top:125px}.hidden{display:none!important}
 @media(max-width:840px){#app{display:flex;flex-direction:column;min-height:100dvh;height:auto}.mapwrap{height:56dvh;min-height:340px;order:0;flex:none}.side{order:1;min-height:370px;border-right:0;border-top:1px solid var(--edge)}.body{overflow:visible}.mapcontrols{top:7px;right:7px;max-width:100%;left:7px}.mapbtn{padding:8px 9px;font-size:12px}.mapinfo{display:none}.mapnote{bottom:28px;left:8px;right:8px;max-width:none}.leaflet-top.leaflet-left{margin-top:80px}}
+
+/* Map engine is native DOM + SVG; no map SDK, API key, or CDN script needed. */
+#map{position:absolute;inset:0;overflow:hidden;background:#a8cfda;touch-action:none;cursor:grab}
+#map.dragging{cursor:grabbing}
+#world{position:absolute;inset:0;pointer-events:none;transform:translate(0,0);will-change:transform}
+.map-tile{position:absolute;width:256px;height:256px;background:#a8cfda;pointer-events:none;overflow:hidden}
+.map-tile img{width:256px;height:256px;display:block;pointer-events:none}
+.map-tile.base{z-index:1}
+.map-tile.bathy{z-index:5;background:transparent}
+.map-tile.bathy img{opacity:.88}
+#world .geometry{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:visible}
+.pin-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;width:17px;height:17px;border:2px solid #0b2732;background:#b2d1dc;box-shadow:0 0 0 1px #6e8395;pointer-events:auto;z-index:30;cursor:pointer;padding:0}
+.pin-marker.named{background:#ffd178;box-shadow:0 0 0 1px #ffd178}
+.pin-marker.active{background:#6fe6bc;width:22px;height:22px;border:3px solid #06292c;box-shadow:0 0 0 2px #6fe6bc;z-index:35}
+.pin-marker.stop{background:#78f0cf;box-shadow:0 0 0 2px #78f0cf}
+.line-label{position:absolute;transform:translate(-50%,-50%);z-index:23;background:#eafff6;color:#14342d;border:1px solid #3e7b67;border-radius:6px;padding:2px 6px;font-size:11px;font-weight:800;white-space:nowrap}
+.point-label{position:absolute;transform:translate(-50%,-160%);font-size:11px;color:white;background:#152c35d9;z-index:23;white-space:nowrap;padding:2px 4px;border-radius:4px}
+.zoomCtrls{position:absolute;right:14px;bottom:58px;z-index:200;display:flex;flex-direction:column;background:#14292d;border:1px solid #5d7f7c;border-radius:8px;overflow:hidden}
+.zoomCtrls button{background:#203b40;color:white;border:0;font-size:26px;line-height:1;width:43px;height:39px;font-weight:600}
+.zoomCtrls button+button{border-top:1px solid #5d7f7c}
+.credits{position:absolute;bottom:2px;right:4px;z-index:201;font-size:10px;color:#1a3034;background:#e0edf0c7;border-radius:3px;padding:1px 4px}
+.mapinfo{max-width:258px}.mapinfo .ok{color:#76edc4}.mapinfo .fail{color:#ffb984}.mapinfo a{font-weight:700}
+#mapMessage{pointer-events:none}
+@media(max-width:840px){.zoomCtrls{bottom:65px;right:8px}}
+
 </style>
 </head>
 <body>
 <div id="app">
  <aside class="side">
-  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V5</div><h1>Lake Washington DPV Planner</h1><p class="lead">Archie's wreck locations + his lake bathymetry · measured DPV legs</p><div id="dataStatus" class="status" role="status">Loading wreck catalog…</div></header>
+  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V6</div><h1>Lake Washington DPV Planner</h1><p class="lead">Archie's wreck locations + his lake bathymetry · measured DPV legs</p><div id="dataStatus" class="status" role="status">Loading Archie’s wreck markers…</div></header>
   <div class="tabs"><button class="tab active" id="tabExplore">Explore wrecks</button><button class="tab" id="tabRoute">Route <span id="routeCount">(0)</span></button></div>
   <div class="body">
    <section class="pane active" id="explorePane">
@@ -42,123 +67,131 @@
   </div>
  </aside>
  <main class="mapwrap" aria-label="Map and wrecks">
-  <div id="map"></div>
-  <div class="mapinfo"><strong>Archie’s Lake Washington bathymetry</strong><div id="mapStatus">Map initializing…</div><div style="margin-top:5px"><a target="_blank" rel="noopener" href="https://github.com/archisgore/lake-washington-bathymetry">Bathymetry source ↗</a></div></div>
+  <div id="map"><div id="world"></div><div class="zoomCtrls"><button id="zoomIn" title="Zoom in">+</button><button id="zoomOut" title="Zoom out">−</button></div><div class="credits">Base: © OpenStreetMap / Esri · Lake bathymetry: Archie</div></div>
+  <div class="mapinfo"><strong>Archie’s Lake Washington bathymetry</strong><div id="mapStatus">Loading map tiles…</div><div style="margin-top:5px"><a id="testTile" target="_blank" rel="noopener" href="https://raw.githubusercontent.com/archisgore/lake-washington-bathymetry/master/tiles/15/5255/21312.png">Test actual bathymetry tile ↗</a></div></div>
   <div class="mapcontrols"><button id="bathy" class="mapbtn active" aria-pressed="true">Bathymetry ON</button><button id="basemap" class="mapbtn active" aria-pressed="true">Streets ON</button><button id="draw" class="mapbtn" aria-pressed="false">Draw route OFF</button><button id="fit" class="mapbtn">Fit route</button></div>
-  <div class="mapnote" id="mapMessage" role="status">Click any wreck marker to inspect it and add it to a route.</div>
+  <div class="mapnote" id="mapMessage" role="status">Click a wreck for its details. Enable Draw route to connect wrecks in sequence.</div>
  </main>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
+/* RunTime DPV Planner v6 — fresh DOM/SVG map engine based on the coordinate/overlay scheme in
+ * https://github.com/archisgore/ScubaDiveMap and his lake-washington-bathymetry tiles.
+ * AGPLv3 source attribution and repo URLs provided in README. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-const URL_DATA='https://raw.githubusercontent.com/archisgore/dive-site-markers/master/markers.json';
-// Exact TMS tile set that Archie uses at map.archisgore.com; no Google Maps key required for this layer.
-const ARCHIE_BATHY='https://archisgore.github.io/lake-washington-bathymetry/tiles/{z}/{x}/{y}.png';
-const DATA_CACHE_KEY='runtimeDpvWreckCacheV5';const ROUTE_KEY='runtimeDpvRouteV5';
-const BOUNDS=[[47.501782,-122.395111],[47.751406,-122.194449]];
-const FALLBACK=[
- {id:'LW286',name:'Diamond Girl',lat:47.523426,lng:-122.25705,depth:-31.90,desc:'Wreck',explored:'YES'},
- {id:'LW584',name:'Dawn',lat:47.522335,lng:-122.253021,depth:-32.10,desc:'Ferry wreck',explored:'YES',fragile:'YES'},
- {id:'LW281',name:'Boot',lat:47.522701,lng:-122.254234,depth:-34.60,explored:'YES'},
- {id:'LW282',name:'Scattered Barge 1',lat:47.522079,lng:-122.255569,depth:-34.50,explored:'YES'},
- {id:'LW283',name:'Scattered Barge 2',lat:47.521839,lng:-122.255363,depth:-35.40,explored:'YES'},
- {id:'LW273',name:'Alantic City Scow',lat:47.525307,lng:-122.252068,depth:-33.80,explored:'YES'},
- {id:'LW583',name:'City Of Blaine',lat:47.526367,lng:-122.251633,depth:-34.60,explored:'YES'}
+const MARKERS='https://raw.githubusercontent.com/archisgore/dive-site-markers/master/markers.json';
+const TILES_BATHY=[
+ 'https://raw.githubusercontent.com/archisgore/lake-washington-bathymetry/master/tiles/',
+ 'https://archisgore.github.io/lake-washington-bathymetry/tiles/'
 ];
-let catalog=FALLBACK.map(normalize),route=[],active=null,drawMode=false,map=null,markersLayer=null,routeLayer=null,bathyLayer=null,streetsLayer=null,markers=new Map(),bathymetryEnabled=true,streetsEnabled=true;
-let errors=[];
-function normalize(w){return {...w,id:String(w.id),name:String(w.name||w.id),lat:Number(w.lat),lng:Number(w.lng),depth:Number(w.depth),explored:String(w.explored||'NO')};}
-function valid(w){return Number.isFinite(w.lat)&&Number.isFinite(w.lng)&&w.lat>=47.48&&w.lat<=47.80&&w.lng>=-122.5&&w.lng<=-122.15;}
-function safeText(v){return String(v==null?'':v).replace(/<[^>]*>/g,'').replace(/undefined/gi,'').trim();}
-function displayName(w){return safeText(w.name)||w.id;}
+const TILE_BASE=[
+ (z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,
+ (z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}`
+];
+const DBKEY='runtime_dpv_catalog_v6',SAVEKEY='runtime_dpv_saved_v6',FTM=3.280839895;
+const bounds=[[47.501782,-122.395111],[47.751406,-122.194449]];
+const fallback=[
+ {id:'LW286',name:'Diamond Girl',lat:47.523426,lng:-122.257050,depth:-31.9,desc:'Wreck',explored:'YES'},
+ {id:'LW584',name:'Dawn',lat:47.522335,lng:-122.253021,depth:-32.1,desc:'Ferry wreck',explored:'YES',fragile:'YES'},
+ {id:'LW281',name:'Boot',lat:47.522701,lng:-122.254234,depth:-34.6,desc:'',explored:'YES'},
+ {id:'LW282',name:'Scattered Barge 1',lat:47.522079,lng:-122.255569,depth:-34.5,desc:'',explored:'YES'},
+ {id:'LW283',name:'Scattered Barge 2',lat:47.521839,lng:-122.255363,depth:-35.4,desc:'',explored:'YES'},
+ {id:'LW273',name:'Alantic City Scow',lat:47.525307,lng:-122.252068,depth:-33.8,explored:'YES'},
+ {id:'LW583',name:'City Of Blaine',lat:47.526367,lng:-122.251633,depth:-34.6,explored:'YES'}
+];
+let catalog=fallback.map(norm), route=[], current=null, draw=false, showBathy=true, showBase=true;
+let center={lat:47.5233,lng:-122.2547},zoom=15, tileNodes=new Map(), run=0,pan=null,loaded={base:0,bathy:0,baseFailed:0,bathyFailed:0};
+const world=$('world'),canvas=$('map');
+function norm(w){return {...w,id:String(w.id),name:String(w.name||w.id),lat:Number(w.lat),lng:Number(w.lng),depth:w.depth==null?NaN:Number(w.depth)};}
+function display(w){return String(w?.name||w?.id||'Waypoint').replace(/<[^>]*>/g,'').trim();}
+function clean(v){return String(v??'').replace(/<[^>]*>/g,'').replace(/undefined/gi,'').trim();}
 function isNamed(w){return !/^Unknown(?:-|$)/i.test(w.name)&&w.name!==w.id&&w.name!=='Unknown';}
-function depthText(w){return Number.isFinite(w.depth)&&w.depth!==0?`${Math.round(Math.abs(w.depth)*3.28084)} ft (reported)`:'Unknown';}
-function node(tag,className,txt){let el=document.createElement(tag);if(className)el.className=className;if(txt!=null)el.textContent=txt;return el;}
-function note(s){$('mapMessage').textContent=s;}
-function status(s){$('dataStatus').textContent=s;}
-function minSec(minutes){if(!Number.isFinite(minutes))return '—';const seconds=Math.max(0,Math.round(minutes*60));return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;}
-function feet(n){return Math.round(n).toLocaleString('en-US')+' ft';}
-function toRad(d){return d*Math.PI/180;}
-function distanceFt(a,b){let dlat=toRad(b.lat-a.lat),dlon=toRad(b.lng-a.lng),p1=toRad(a.lat),p2=toRad(b.lat);let h=Math.sin(dlat/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dlon/2)**2;return 6371008.8*2*Math.asin(Math.min(1,Math.sqrt(h)))*3.280839895;}
-function bearing(a,b){const p1=toRad(a.lat),p2=toRad(b.lat),dl=toRad(b.lng-a.lng),x=Math.sin(dl)*Math.cos(p2),y=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);return (Math.atan2(x,y)*180/Math.PI+360)%360;}
-function speed(){let n=Number($('speed').value);return Number.isFinite(n)&&n>=20&&n<=800?n:175;}
-function stopAllowance(){let n=Number($('reserve').value);return Number.isFinite(n)&&n>=0&&n<=120?n:0;}
-function pointIcon(w,selected=false){return L.divIcon({html:`<div class="pin ${selected?'selected':isNamed(w)?'named':''}"></div>`,className:'',iconSize:[selected?22:17,selected?22:17],iconAnchor:[selected?11:8,selected?11:8]});}
-function setMapStatus(s){$('mapStatus').textContent=s;}
-function initMap(){
- if(!window.L){setMapStatus('Map library unavailable');note('Leaflet did not load. Check the connection and reload.');return;}
- map=L.map('map',{zoomControl:true,preferCanvas:false,worldCopyJump:false,maxZoom:20}).setView([47.5230,-122.2547],15);
- map.createPane('streets');map.getPane('streets').style.zIndex='200';
- map.createPane('archieBathy');map.getPane('archieBathy').style.zIndex='350';map.getPane('archieBathy').style.pointerEvents='none';
- map.createPane('routes');map.getPane('routes').style.zIndex='470';
- map.createPane('wrecks');map.getPane('wrecks').style.zIndex='630';
- streetsLayer=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{pane:'streets',maxZoom:20,maxNativeZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',updateWhenIdle:true,keepBuffer:2}).addTo(map);
- bathyLayer=L.tileLayer(ARCHIE_BATHY,{pane:'archieBathy',tms:true,bounds:BOUNDS,minZoom:0,maxZoom:20,maxNativeZoom:19,opacity:.88,keepBuffer:2,attribution:'Bathymetry &copy; <a href="https://github.com/archisgore/lake-washington-bathymetry">Archie (CC0)</a>'}).addTo(map);
- markersLayer=L.layerGroup().addTo(map);routeLayer=L.layerGroup().addTo(map);
- let loadedBathy=0;
- bathyLayer.on('tileload',()=>{if(++loadedBathy===1)setMapStatus('Archie bathymetry tiles loaded (TMS)');});
- bathyLayer.on('tileerror',()=>{if(loadedBathy===0)setMapStatus('Bathymetry image unavailable here. Check tile source.');});
- streetsLayer.on('tileerror',()=>{setMapStatus('Street tile error. Wrecks & bathymetry remain selectable.');});
- map.on('click',ev=>{if(!drawMode)return;const w={id:'WP-'+Date.now(),name:`Waypoint ${route.filter(x=>x.id.startsWith('WP-')).length+1}`,lat:ev.latlng.lat,lng:ev.latlng.lng,depth:NaN,custom:true};addToRoute(w);});
- map.on('moveend',()=>{if($('sort').value==='near')renderList();});
- setTimeout(()=>map.invalidateSize(),0);
- renderMarkers();renderRoute();
+function rad(x){return x*Math.PI/180;}
+function dist(a,b){const dl=rad(b.lat-a.lat),dn=rad(b.lng-a.lng),p=rad(a.lat),q=rad(b.lat);const h=Math.sin(dl/2)**2+Math.cos(p)*Math.cos(q)*Math.sin(dn/2)**2;return 2*6371008.8*Math.asin(Math.min(1,Math.sqrt(h)))*FTM;}
+function bearing(a,b){const p=rad(a.lat),q=rad(b.lat),dl=rad(b.lng-a.lng);return (Math.atan2(Math.sin(dl)*Math.cos(q),Math.cos(p)*Math.sin(q)-Math.sin(p)*Math.cos(q)*Math.cos(dl))*180/Math.PI+360)%360;}
+function tm(m){const s=Math.round(Math.max(0,m*60));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function feet(d){return Math.round(d).toLocaleString('en-US')+' ft';}
+function speed(){return Math.min(800,Math.max(20,Number($('speed').value)||175));}
+function extra(){return Math.max(0,Number($('reserve').value)||0);}
+function depth(w){return Number.isFinite(w.depth)&&w.depth!==0?Math.round(Math.abs(w.depth)*FTM)+' ft':'Unknown';}
+function create(tag,cls,txt){let n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
+function notify(t){$('mapMessage').textContent=t;}
+function status(){let e=$('mapStatus');e.textContent=(showBathy?'Bathymetry '+(loaded.bathy?`${loaded.bathy} tiles received`:(loaded.bathyFailed?'unavailable':'loading'))+' · ':'Bathymetry OFF · ')+(showBase?'Streets '+(loaded.base?`${loaded.base} tiles received`:(loaded.baseFailed?'unavailable':'loading')):'Streets OFF');e.className=(loaded.bathy?'ok':'')+(loaded.bathyFailed&&!loaded.bathy?' fail':'');}
+function tileXY(lat,lng,z){let n=2**z,p=Math.min(85.05,Math.max(-85.05,lat));return {x:(lng+180)/360*n*256,y:(1-Math.log(Math.tan(rad(p))+1/Math.cos(rad(p)))/Math.PI)/2*n*256};}
+function latLng(px,py,z){const n=2**z,lng=px/(n*256)*360-180,lat=Math.atan(Math.sinh(Math.PI*(1-2*py/(n*256))))*180/Math.PI;return {lat,lng};}
+function project(w){let c=tileXY(center.lat,center.lng,zoom),p=tileXY(w.lat,w.lng,zoom);return {x:p.x-c.x+canvas.clientWidth/2,y:p.y-c.y+canvas.clientHeight/2};}
+function unproject(x,y){let c=tileXY(center.lat,center.lng,zoom);return latLng(c.x+x-canvas.clientWidth/2,c.y+y-canvas.clientHeight/2,zoom);}
+function downloadImage(type,z,x,y,wrapper,onDone){let providers=type==='base'?TILE_BASE:TILES_BATHY.map(host=>()=>`${host}${z}/${x}/${2**z-y-1}.png`);
+ let img=document.createElement('img');img.alt='';img.decoding='async';img.loading='eager';wrapper.appendChild(img);let index=0,complete=false;
+ const next=()=>{if(!wrapper.isConnected)return;if(index>=providers.length){if(!complete){complete=true;loaded[type+'Failed']++;status();}return;}let make=providers[index++];img.src=type==='base'?make(z,x,y):make();};
+ img.onload=()=>{if(complete)return;complete=true;loaded[type]++;status();onDone?.();};img.onerror=next;next();}
+function renderTiles(){let w=canvas.clientWidth,h=canvas.clientHeight;if(w<20||h<20)return;run++;loaded={base:0,bathy:0,baseFailed:0,bathyFailed:0};tileNodes.clear();world.replaceChildren();let c=tileXY(center.lat,center.lng,zoom),n=2**zoom;
+ const x0=Math.floor((c.x-w/2)/256)-1,x1=Math.floor((c.x+w/2)/256)+1,y0=Math.floor((c.y-h/2)/256)-1,y1=Math.floor((c.y+h/2)/256)+1;
+ for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){
+   if(x<0||x>=n||y<0||y>=n)continue;
+   let left=x*256-c.x+w/2,top=y*256-c.y+h/2;
+   for(const typ of ['base','bathy']){
+     if(typ==='base'&&!showBase||typ==='bathy'&&!showBathy)continue;
+     if(typ==='bathy'&&!intersectsLake(x,y,zoom))continue;
+     let t=create('div','map-tile '+typ);t.style.left=left+'px';t.style.top=top+'px';world.append(t);
+     downloadImage(typ,zoom,x,y,t);
+   }
  }
-function changeTab(tab){const r=tab==='route';$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;}
-function select(w,center=true){active=w;$('feature').classList.add('show');$('featureName').textContent=displayName(w);$('featureSub').textContent=`${w.id} · ${depthText(w)} · ${w.explored==='YES'?'explored':'unconfirmed'}${w.fragile==='YES'?' · FRAGILE':''}`;$('featureDesc').textContent=safeText(w.desc)||'No description in Archie’s database';
- const details=$('featureDetails');details.replaceChildren();[['GPS',`${w.lat.toFixed(6)}, ${w.lng.toFixed(6)}`],['Alternate name',safeText(w.alias)||'—'],['Documented',w.documented||'Unknown'],['Identified',w.identified||'Unknown'],['Fragile',w.fragile||'Unknown']].forEach(([label,value])=>details.append(node('span','',label),node('span','',value)));
- $('featureArchie').href='https://map.archisgore.com/#'+encodeURIComponent(w.id);
- changeTab('explore');renderList();if(center&&map){map.panTo([w.lat,w.lng]);let marker=markers.get(w.id);if(marker)marker.openPopup();}
- }
-function renderMarkers(){if(!map||!markersLayer)return;markersLayer.clearLayers();markers.clear();catalog.forEach(w=>{let marker=L.marker([w.lat,w.lng],{icon:pointIcon(w),title:`${displayName(w)} · ${w.id}`,pane:'wrecks'});marker.on('click',()=>{if(drawMode){addToRoute(w);return;}select(w,false);});marker.bindTooltip(`${displayName(w)} (${w.id})`);marker.addTo(markersLayer);markers.set(w.id,marker);});}
-function renderList(){const term=$('search').value.trim().toLowerCase(),filter=$('filter').value,sort=$('sort').value;let arr=catalog.filter(w=>(!term||(`${w.name} ${w.alias||''} ${w.id} ${safeText(w.desc)}`).toLowerCase().includes(term))&&(filter!=='named'||isNamed(w))&&(filter!=='explored'||w.explored==='YES'));
- if(sort==='name')arr.sort((a,b)=>a.name.localeCompare(b.name));else if(sort==='depth')arr.sort((a,b)=>(Math.abs(a.depth)||999)-(Math.abs(b.depth)||999));else{let c=map?map.getCenter():{lat:47.523,lng:-122.255};arr.sort((a,b)=>distanceFt(a,c)-distanceFt(b,c));}
- $('resultCount').textContent=`${arr.length} matching wrecks · ${catalog.length} loaded · showing first ${Math.min(60,arr.length)}`;
- let list=$('wreckList');list.replaceChildren();arr.slice(0,60).forEach(w=>{let item=node('div','wreck'+(active?.id===w.id?' active':''));let b=node('button','link');b.append(node('strong','',displayName(w)),node('span','',`${w.id} · ${depthText(w)}`));b.addEventListener('click',()=>select(w));let add=node('button','add','+ Add');add.addEventListener('click',()=>addToRoute(w));item.append(b,add);list.appendChild(item);});}
-function addToRoute(w){if(route.length&&route.at(-1).id===w.id){note(`${displayName(w)} is already the last stop.`);changeTab('route');return;}
- route.push({...w});renderRoute();changeTab('route');note(`${displayName(w)} added. ${route.length} waypoints · ${Math.max(0,route.length-1)} legs.`);}
-function removeStop(i){route.splice(i,1);renderRoute();}
-function renderRoute(){let v=$('stops');v.replaceChildren();$('routeCount').textContent=`(${route.length})`;
- let distance=0;const fpm=speed();const allowance=stopAllowance();
- if(!route.length)v.append(node('div','helper','No waypoints yet. Click a wreck on the map and add it, or turn Draw route ON to draw by clicking wreck markers.'));
- route.forEach((w,i)=>{let line=node('div','leg'),h=node('div','leghead');h.append(node('div','index',String(i+1)),node('div','legtitle',displayName(w)));let rm=node('button','legbtn','×');rm.title='Remove waypoint';rm.addEventListener('click',()=>removeStop(i));h.appendChild(rm);line.appendChild(h);
- if(i){const d=distanceFt(route[i-1],w);distance+=d;let deg=bearing(route[i-1],w);line.append(node('div','legsub',`${feet(d)} · ${Math.round(deg)}° TRUE · ${minSec(d/fpm)} at ${fpm} ft/min`));}else line.append(node('div','legsub',`${w.lat.toFixed(6)}, ${w.lng.toFixed(6)} · start`));
- v.appendChild(line);});
- $('totalDist').textContent=feet(distance);$('totalTime').textContent=minSec(distance/fpm);$('totalLegs').textContent=Math.max(0,route.length-1);$('withStops').textContent=minSec(distance/fpm+allowance*Math.max(0,route.length-1));
- if(map&&routeLayer){routeLayer.clearLayers();if(route.length>1){let latlngs=route.map(w=>[w.lat,w.lng]);let poly=L.polyline(latlngs,{color:'#6cf0cb',weight:4,opacity:.98,pane:'routes'}).addTo(routeLayer);
- for(let i=1;i<route.length;i++){let a=route[i-1],b=route[i],d=distanceFt(a,b),mid=[(a.lat+b.lat)/2,(a.lng+b.lng)/2];
- let p=L.marker(mid,{interactive:false,icon:L.divIcon({html:`<div class="route-label">${feet(d)} · ${minSec(d/fpm)}</div>`,className:'',iconSize:[118,20],iconAnchor:[59,10]}),pane:'routes'}).addTo(routeLayer);}
- }
- route.forEach((w,i)=>{let m=L.circleMarker([w.lat,w.lng],{pane:'routes',radius:10,weight:3,color:'#06251d',fillColor:'#74eed0',fillOpacity:.97});m.addTo(routeLayer);m.bindTooltip(String(i+1),{permanent:true,direction:'center',className:'route-step'});});}
- }
-function toggleDraw(on){drawMode=on;for(const b of [$('draw'),$('drawRoute')]){b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));b.textContent=`Draw route ${on?'ON':'OFF'}`;}if(map)map.getContainer().style.cursor=on?'crosshair':'';note(on?'DRAW MODE: click wreck markers in order to connect them, or click open water for custom waypoints.':'DRAW MODE OFF: select a wreck to see its details.');}
-function showAll(){if(map)map.fitBounds(BOUNDS,{padding:[20,20]});}
-function fitRoute(){if(!map)return;if(route.length>1)map.fitBounds(route.map(w=>[w.lat,w.lng]),{padding:[70,70],maxZoom:17});else if(route.length===1)map.setView([route[0].lat,route[0].lng],17);else showAll();}
-async function loadCatalog(force=false){let cached=null;try{cached=JSON.parse(localStorage.getItem(DATA_CACHE_KEY)||'null');}catch(e){}
- if(!force&&cached?.length){catalog=cached.map(normalize).filter(valid);renderMarkers();renderList();status(`${catalog.length} Lake Washington markers · cached`);}
- try{let response=await fetch(URL_DATA,{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);let src=await response.json();let a=src.wpt.filter(w=>String(w.id).startsWith('LW')).map(normalize).filter(valid);if(a.length<150)throw Error('Catalog unusually small');catalog=a;try{localStorage.setItem(DATA_CACHE_KEY,JSON.stringify(a));}catch(e){}status(`${catalog.length} Lake Washington markers loaded from Archie`);renderMarkers();renderList();}
- catch(e){if(!cached?.length){catalog=FALLBACK.map(normalize);status(`Offline fallback: ${catalog.length} wrecks`);renderMarkers();renderList();}note('The live marker feed was unavailable; showing cached or bundled wrecks.');}
+ renderGraphics();status();
 }
-function esc(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;');}
-function saveFile(filename,body,mime){let blob=new Blob([body],{type:mime});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);}
-function filename(){return $('routeName').value.trim().replace(/[^a-z0-9-_]+/gi,'-').replace(/^-|-$/g,'').slice(0,50)||'Lake-Washington-DPV';}
-function exportGPX(){if(!route.length){note('Add at least one waypoint before exporting.');return;}
- let xml=`<?xml version="1.0" encoding="UTF-8"?>\n<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="RunTime DPV Planner">\n<metadata><name>${esc($('routeName').value)}</name></metadata>\n<rte><name>${esc($('routeName').value)}</name>\n`+route.map(w=>`<rtept lat="${w.lat}" lon="${w.lng}"><name>${esc(displayName(w))}</name><desc>${esc(w.id)}</desc></rtept>`).join('\n')+'\n</rte>\n</gpx>';saveFile(filename()+'.gpx',xml,'application/gpx+xml');}
-function exportCSV(){if(!route.length){note('Add waypoints first.');return;}let csv=['Order,Name,ID,Latitude,Longitude,Depth_ft,Leg_distance_ft,Bearing_true_deg,Travel_time_min'];route.forEach((w,i)=>{let a=route[i-1],d=a?distanceFt(a,w):0;csv.push([i+1,`"${displayName(w).replaceAll('"','""')}"`,w.id,w.lat,w.lng,Number.isFinite(w.depth)?Math.round(Math.abs(w.depth)*3.28084):'',Math.round(d),a?Math.round(bearing(a,w)):'',+(d/speed()).toFixed(2)].join(','));});saveFile(filename()+'.csv',csv.join('\n'),'text/csv');}
-function setListeners(){
- $('tabExplore').onclick=()=>changeTab('explore');$('tabRoute').onclick=()=>changeTab('route');$('search').oninput=renderList;$('filter').onchange=renderList;$('sort').onchange=renderList;
- $('diamond').onclick=()=>{if(map)map.setView([47.5230,-122.2547],16);};$('entire').onclick=showAll;$('refresh').onclick=()=>loadCatalog(true);
- $('featureAdd').onclick=()=>{if(active)addToRoute(active);};$('featureZoom').onclick=()=>{if(active&&map)map.setView([active.lat,active.lng],17);};
- $('draw').onclick=()=>toggleDraw(!drawMode);$('drawRoute').onclick=()=>toggleDraw(!drawMode);$('fit').onclick=fitRoute;
- $('bathy').onclick=()=>{bathymetryEnabled=!bathymetryEnabled;if(map&&bathyLayer){if(bathymetryEnabled)bathyLayer.addTo(map);else map.removeLayer(bathyLayer);}let b=$('bathy');b.classList.toggle('active',bathymetryEnabled);b.setAttribute('aria-pressed',String(bathymetryEnabled));b.textContent=`Bathymetry ${bathymetryEnabled?'ON':'OFF'}`;setMapStatus(bathymetryEnabled?'Archie’s Lake Washington TMS overlay enabled':'Bathymetry hidden');};
- $('basemap').onclick=()=>{streetsEnabled=!streetsEnabled;if(map&&streetsLayer){if(streetsEnabled)streetsLayer.addTo(map);else map.removeLayer(streetsLayer);}let b=$('basemap');b.classList.toggle('active',streetsEnabled);b.textContent=`Streets ${streetsEnabled?'ON':'OFF'}`;b.setAttribute('aria-pressed',String(streetsEnabled));};
- $('speed').oninput=renderRoute;$('reserve').oninput=renderRoute;$('undo').onclick=()=>{route.pop();renderRoute();};$('reverse').onclick=()=>{route.reverse();renderRoute();};$('clear').onclick=()=>{if(route.length&&confirm('Clear every waypoint from this route?')){route=[];renderRoute();}};
- $('saveRoute').onclick=()=>{try{localStorage.setItem(ROUTE_KEY,JSON.stringify({name:$('routeName').value,speed:$('speed').value,route}));note('Route saved on this device.');}catch(e){note('Saving is not available in this browser.');}};
- $('loadRoute').onclick=()=>{try{let obj=JSON.parse(localStorage.getItem(ROUTE_KEY)||'null');if(!obj||!Array.isArray(obj.route)){note('No saved route on this device.');return;}$('routeName').value=obj.name||'Lake Washington DPV route';$('speed').value=obj.speed||175;route=obj.route.map(normalize);renderRoute();fitRoute();changeTab('route');note(`Loaded ${route.length} waypoints.`);}catch(e){note('Could not load saved route.');}};
- $('downloadGPX').onclick=exportGPX;$('downloadCSV').onclick=exportCSV;
+function intersectsLake(x,y,z){let a=latLng(x*256,(y+1)*256,z),b=latLng((x+1)*256,y*256,z);return b.lat>=bounds[0][0]&&a.lat<=bounds[1][0]&&b.lng>=bounds[0][1]&&a.lng<=bounds[1][1];}
+function renderGraphics(){world.querySelectorAll('.geometry,.pin-marker,.line-label,.point-label').forEach(x=>x.remove());let w=canvas.clientWidth,h=canvas.clientHeight;
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','geometry');svg.setAttribute('width',w);svg.setAttribute('height',h);world.appendChild(svg);
+ if(route.length>1){let poly=document.createElementNS(svg.namespaceURI,'polyline');poly.setAttribute('points',route.map(o=>{let p=project(o);return p.x+','+p.y}).join(' '));poly.setAttribute('fill','none');poly.setAttribute('stroke','#072f33');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
+ let line=poly.cloneNode();line.setAttribute('stroke','#6ef0c1');line.setAttribute('stroke-width','4');svg.appendChild(line);
+ for(let i=1;i<route.length;i++){let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;if(x<-100||x>w+100||y<-50||y>h+50)continue;let label=create('div','line-label',feet(dist(route[i-1],route[i]))+' · '+tm(dist(route[i-1],route[i])/speed()));label.style.left=x+'px';label.style.top=y+'px';world.appendChild(label);}}
+ let routed=new Set(route.map(x=>x.id));
+ for(const p of catalog){const a=project(p);if(a.x<-30||a.y<-30||a.x>w+30||a.y>h+30)continue;let button=create('button','pin-marker'+(isNamed(p)?' named':'')+(routed.has(p.id)?' stop':'')+(current?.id===p.id?' active':''));button.title=display(p)+' · '+p.id+' · '+depth(p);button.setAttribute('aria-label',button.title);button.style.left=a.x+'px';button.style.top=a.y+'px';button.dataset.wreckId=p.id;button.addEventListener('click',e=>{e.stopPropagation();if(draw){add(p);}else{choose(p,false);}});world.appendChild(button);}
+ for(let i=0;i<route.length;i++){let a=project(route[i]);if(a.x<-20||a.y<-20||a.x>w+20||a.y>h+20)continue;if(String(route[i].id).startsWith('WP-')){let dot=create('button','pin-marker stop');dot.title=display(route[i]);dot.style.left=a.x+'px';dot.style.top=a.y+'px';dot.addEventListener('click',e=>{e.stopPropagation();choose(route[i],false);});world.append(dot);}let label=create('div','point-label',String(i+1)+' '+display(route[i]));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);}
+}
+function refresh(){renderTiles();}
+function switchTab(tab){let r=tab==='route';$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;}
+function choose(w,fly=true){current=w;$('feature').classList.add('show');$('featureName').textContent=display(w);$('featureSub').textContent=w.id+' · '+depth(w)+' · '+(w.explored==='YES'?'Explored':'Unconfirmed');$('featureDesc').textContent=clean(w.desc)||'No description in Archie’s database';
+ $('featureDetails').replaceChildren();[['GPS',w.lat.toFixed(6)+', '+w.lng.toFixed(6)],['Alias',clean(w.alias)||'—'],['Documented',w.documented||'Unknown'],['Identified',w.identified||'Unknown'],['Fragile',w.fragile||'Unknown']].forEach(([k,v])=>{$('featureDetails').append(create('span','',k),create('span','',v));});$('featureArchie').href='https://map.archisgore.com/#'+encodeURIComponent(w.id);
+ if(fly){center={lat:w.lat,lng:w.lng};refresh();}else renderGraphics();switchTab('explore');drawList();notify(display(w)+': details displayed. Use + Add to route to draw a leg.');}
+function drawList(){let term=$('search').value.toLowerCase().trim(),filter=$('filter').value,sort=$('sort').value;let rows=catalog.filter(w=>(!term||(display(w)+' '+w.id+' '+clean(w.alias)+' '+clean(w.desc)).toLowerCase().includes(term))&&(filter!=='named'||isNamed(w))&&(filter!=='explored'||w.explored==='YES'));
+ if(sort==='name')rows.sort((a,b)=>display(a).localeCompare(display(b)));else if(sort==='depth')rows.sort((a,b)=>(Math.abs(a.depth)||999)-(Math.abs(b.depth)||999));else rows.sort((a,b)=>dist(a,center)-dist(b,center));
+ $('resultCount').textContent=`${rows.length} matching markers · ${catalog.length} loaded · showing ${Math.min(80,rows.length)}`;$('wreckList').replaceChildren();rows.slice(0,80).forEach(p=>{let li=create('div','wreck'+(current?.id===p.id?' active':''));let b=create('button','link');b.append(create('strong','',display(p)),create('span','',p.id+' · '+depth(p)));b.addEventListener('click',()=>choose(p));let addBtn=create('button','add','+ Add');addBtn.addEventListener('click',()=>add(p));li.append(b,addBtn);$('wreckList').appendChild(li);});}
+function add(w){route.push({...w});drawRoute();switchTab('route');notify(display(w)+' added. '+route.length+' stops, '+Math.max(0,route.length-1)+' connected legs.');}
+function drawRoute(){let list=$('stops');list.replaceChildren();$('routeCount').textContent='('+route.length+')';let distance=0;if(!route.length)list.append(create('p','helper','Click + Add beside a wreck, or enable Draw route and click consecutive wreck markers.'));
+ route.forEach((w,i)=>{let row=create('div','leg'),top=create('div','leghead');top.append(create('span','index',String(i+1)),create('span','legtitle',display(w)));let rm=create('button','legbtn','×');rm.title='Remove stop';rm.onclick=()=>{route.splice(i,1);drawRoute();};top.append(rm);row.append(top);
+ if(i){let d=dist(route[i-1],w);distance+=d;row.append(create('div','legsub',feet(d)+' · '+bearing(route[i-1],w).toFixed(0)+'° TRUE · '+tm(d/speed())));}else row.append(create('div','legsub','Starting waypoint'));list.append(row);});
+ $('totalDist').textContent=feet(distance);$('totalTime').textContent=tm(distance/speed());$('totalLegs').textContent=Math.max(0,route.length-1);$('withStops').textContent=tm(distance/speed()+extra()*Math.max(0,route.length-1));renderGraphics();}
+function drawState(on){draw=on;for(let k of ['draw','drawRoute']){let b=$(k);b.classList.toggle('active',draw);b.textContent='Draw route '+(draw?'ON':'OFF');b.setAttribute('aria-pressed',String(draw));}notify(draw?'Draw ON: click wreck markers in sequence, or click water to add a waypoint.':'Draw OFF: click any wreck to view its details.');}
+function zoomTo(z){if(z===zoom||z<9||z>19)return;zoom=z;refresh();}
+function fit(){if(route.length===0){center={lat:47.6265,lng:-122.2948};zoom=11;}else if(route.length===1){center={lat:route[0].lat,lng:route[0].lng};zoom=16;}else{let n=Math.min(...route.map(w=>w.lat)),s=Math.max(...route.map(w=>w.lat)),e=Math.max(...route.map(w=>w.lng)),w=Math.min(...route.map(w=>w.lng));center={lat:(n+s)/2,lng:(e+w)/2};zoom=16;for(let z=19;z>=9;z--){zoom=z;let pts=route.map(project);if(pts.every(p=>p.x>80&&p.x<canvas.clientWidth-80&&p.y>80&&p.y<canvas.clientHeight-80))break;}}refresh();}
+function saveFile(name,text,mime){let u=URL.createObjectURL(new Blob([text],{type:mime})),a=create('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
+function escapeXml(v){return String(v||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
+function fileName(){return $('routeName').value.replace(/[^a-zA-Z0-9-]/g,'-').slice(0,60)||'DPV-Route';}
+function csv(){let out=['Order,Wreck,ID,Lat,Lon,Depth_ft,Leg_ft,Bearing_TRUE,Leg_minutes'];route.forEach((p,i)=>{let a=route[i-1],d=a?dist(a,p):0;out.push([i+1,'"'+display(p).replaceAll('"','""')+'"',p.id,p.lat,p.lng,Number.isFinite(p.depth)?Math.round(Math.abs(p.depth)*FTM):'',Math.round(d),a?bearing(a,p).toFixed(0):'',(d/speed()).toFixed(2)].join(','));});saveFile(fileName()+'.csv',out.join('\n'),'text/csv');}
+function gpx(){let items=route.map(p=>`<rtept lat="${p.lat}" lon="${p.lng}"><name>${escapeXml(display(p))}</name><desc>${escapeXml(p.id)}</desc></rtept>`).join('\n');saveFile(fileName()+'.gpx',`<?xml version="1.0"?><gpx version="1.1" creator="RunTime DPV" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>${escapeXml($('routeName').value)}</name>${items}</rte></gpx>`,'application/gpx+xml');}
+async function loadCatalog(){try{let old=JSON.parse(localStorage.getItem(DBKEY)||'null');if(Array.isArray(old)&&old.length>150){catalog=old.map(norm);$('dataStatus').textContent=catalog.length+' cached wrecks from Archie';renderGraphics();drawList();}}catch(e){}
+ try{let resp=await fetch(MARKERS,{cache:'no-store'});if(!resp.ok)throw Error('HTTP '+resp.status);let json=await resp.json();let a=json.wpt.filter(p=>String(p.id).startsWith('LW')).map(norm).filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lng));if(a.length<150)throw Error('Incomplete catalog');catalog=a;try{localStorage.setItem(DBKEY,JSON.stringify(a));}catch(e){}$('dataStatus').textContent=catalog.length+' Lake Washington markers loaded from Archie';renderGraphics();drawList();}catch(err){$('dataStatus').textContent=catalog.length+' markers available · source offline';notify('Could not update marker database. Showing bundled or cached wrecks.');}}
+function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']])$(a).onclick=()=>switchTab(t);
+ $('search').oninput=drawList;$('filter').onchange=drawList;$('sort').onchange=drawList;
+ $('diamond').onclick=()=>{center={lat:47.5233,lng:-122.2547};zoom=16;refresh();drawList();};$('entire').onclick=()=>{center={lat:47.6265,lng:-122.2948};zoom=11;refresh();drawList();};$('refresh').onclick=loadCatalog;
+ $('featureAdd').onclick=()=>{if(current)add(current);};$('featureZoom').onclick=()=>{if(current){center={lat:current.lat,lng:current.lng};zoom=17;refresh();}};
+ $('zoomIn').onclick=()=>zoomTo(zoom+1);$('zoomOut').onclick=()=>zoomTo(zoom-1);$('draw').onclick=()=>drawState(!draw);$('drawRoute').onclick=()=>drawState(!draw);$('fit').onclick=fit;
+ $('bathy').onclick=()=>{showBathy=!showBathy;let b=$('bathy');b.classList.toggle('active',showBathy);b.textContent='Bathymetry '+(showBathy?'ON':'OFF');b.setAttribute('aria-pressed',String(showBathy));refresh();};
+ $('basemap').onclick=()=>{showBase=!showBase;let b=$('basemap');b.classList.toggle('active',showBase);b.textContent='Streets '+(showBase?'ON':'OFF');b.setAttribute('aria-pressed',String(showBase));refresh();};
+ $('speed').oninput=drawRoute;$('reserve').oninput=drawRoute;$('undo').onclick=()=>{route.pop();drawRoute();};$('reverse').onclick=()=>{route.reverse();drawRoute();};$('clear').onclick=()=>{route=[];drawRoute();};
+ $('saveRoute').onclick=()=>{try{localStorage.setItem(SAVEKEY,JSON.stringify({route,name:$('routeName').value,speed:speed(),reserve:extra()}));notify('Route saved on this device.');}catch(e){notify('Saving was blocked. Use GPX export.');}};
+ $('loadRoute').onclick=()=>{let data;try{data=JSON.parse(localStorage.getItem(SAVEKEY));}catch(e){}if(!data?.route){notify('No saved route found on this device.');return;}route=data.route.map(norm);$('routeName').value=data.name;$('speed').value=data.speed;$('reserve').value=data.reserve;drawRoute();fit();notify('Saved route loaded.');};
+ $('downloadCSV').onclick=csv;$('downloadGPX').onclick=gpx;
+ let position=null,moved=false;
+ canvas.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;position={x:e.clientX,y:e.clientY,from:tileXY(center.lat,center.lng,zoom)};moved=false;canvas.classList.add('dragging');canvas.setPointerCapture(e.pointerId);});
+ canvas.addEventListener('pointermove',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;world.style.transform=`translate(${dx}px,${dy}px)`;});
+ canvas.addEventListener('pointerup',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;let wasMoved=moved;let orig=position;position=null;canvas.classList.remove('dragging');world.style.transform='';if(wasMoved){center=latLng(orig.from.x-dx,orig.from.y-dy,zoom);refresh();drawList();}else if(draw&&!e.target.closest('button,a')){let rect=canvas.getBoundingClientRect();let p=unproject(e.clientX-rect.left,e.clientY-rect.top);add({id:'WP-'+Date.now(),name:'Waypoint '+(route.filter(w=>w.id.startsWith('WP-')).length+1),lat:p.lat,lng:p.lng,depth:NaN});}try{canvas.releasePointerCapture(e.pointerId)}catch(err){};});
+ canvas.addEventListener('pointercancel',()=>{position=null;canvas.classList.remove('dragging');world.style.transform='';});
+ canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTo(zoom+(e.deltaY<0?1:-1));},{passive:false});
+ window.addEventListener('resize',()=>{clearTimeout(window.__resizeMap);window.__resizeMap=setTimeout(refresh,160);});
  }
-setListeners();initMap();renderList();loadCatalog();
-window.__dpvTest={distanceFt,bearing,minSec,addToRoute,select,renderRoute,getRoute:()=>route,getCatalog:()=>catalog,toggleDraw};
+wire();refresh();drawList();drawRoute();loadCatalog();
+window.__dpvV6={dist,bearing,add,choose,route:()=>route,center:()=>center,zoom:()=>zoom,refresh,showBathy:()=>showBathy,loadCatalog};
 })();
 </script></body></html>
