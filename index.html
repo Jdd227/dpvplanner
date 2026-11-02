@@ -41,6 +41,16 @@
 #map.placing-start{cursor:crosshair}
 .pin-marker.start-marker{width:29px;height:29px;border:2px solid #122e35;box-shadow:0 0 0 2px #fff6c0;background:#ffe3a2;color:#103237;display:grid;place-items:center;font-size:15px;font-weight:950;z-index:39}
 .pin-marker.start-marker.boat{background:#bce4ff;box-shadow:0 0 0 2px #bce4ff}
+.pin-marker.route-pin{width:27px;height:27px;display:grid;place-items:center;font-size:12px;font-weight:900;background:#78f0cf;color:#092e34;border:2px solid #0b3031;box-shadow:0 0 0 2px #edfef8;z-index:50;cursor:grab;touch-action:none}
+.pin-marker.route-pin.shore{background:#ffe3a2;box-shadow:0 0 0 2px #ffe3a2}
+.pin-marker.route-pin.boat{background:#bce4ff;box-shadow:0 0 0 2px #bce4ff}
+.pin-marker.route-pin:active{cursor:grabbing}
+.preview-label{position:absolute;transform:translate(-50%,-140%);z-index:24;padding:3px 7px;border:1px dashed #357561;border-radius:6px;background:#eafff6;color:#10352c;font-size:11px;font-weight:850;pointer-events:none;white-space:nowrap}
+.point-menu{position:absolute;z-index:800;width:min(275px,calc(100% - 16px));padding:12px;background:#152b30;border:1px solid #78c8ad;border-radius:11px;box-shadow:0 9px 32px #000a}
+.point-menu[hidden]{display:none}.point-menu .label{margin:8px 0 4px}.point-menu .input{min-height:35px;padding:7px 9px}.point-menu .group{margin:10px 0 3px}
+.point-menu .helper{margin:7px 0 0}.point-menu-header{display:flex;align-items:center;justify-content:space-between;gap:8px}.point-menu-header strong{overflow-wrap:anywhere}
+#pointMenuClose{font-size:21px;line-height:1;color:var(--ink);border:0;background:none}.point-menu-gps{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:5px}
+#map.relocating-point{cursor:crosshair}
 .custom-row .index{background:#264e61;color:#d4f3ff}.custom-row .legtitle{color:#b9ecff}.start-row .index{background:#8b6733;color:#fff4d4}.start-row .legtitle{color:#ffe0a1}
 .start-gps{font-size:11px;color:#a9c7c7;margin:5px 0 3px 34px;font-variant-numeric:tabular-nums}
 .start-edit{display:flex;gap:6px;align-items:center;margin:8px 0 3px 34px}.start-edit .input{min-width:0;flex:1;padding:6px 7px;min-height:33px}.start-edit .legbtn{min-height:33px}
@@ -51,7 +61,7 @@
 <body>
 <div id="app">
  <aside class="side">
-  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V8</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
+  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V9</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
   <div class="tabs"><button class="tab active" id="tabExplore">Explore wrecks</button><button class="tab" id="tabRoute">Route <span id="routeCount">(0)</span></button></div>
   <div class="body">
    <section class="pane active" id="explorePane">
@@ -68,11 +78,11 @@
    <section class="pane" id="routePane">
     <label for="routeName" class="label">Route name</label><input class="input" id="routeName" value="Lake Washington DPV route">
     <div class="start-panel">
-      <div class="start-title">Starting location <span class="pill">Waypoint 1</span></div>
-      <p class="helper">Mark your shore entry or boat drop. It becomes the first waypoint and all legs recalculate.</p>
+      <div class="start-title">Shore / boat waypoints <span class="pill">Start or finish</span></div>
+      <p class="helper">Add a shore entry or boat drop at any stage, including the final leg back to shore. Change any existing waypoint type from its point menu.</p>
       <div class="group"><button id="shoreStart" class="btn primary" type="button">+ Shore entry</button><button id="boatStart" class="btn primary" type="button">+ Boat drop</button></div>
       <div id="startGuide" class="start-guide" hidden>
-        <strong id="startGuideTitle">Click map to place starting point</strong>
+        <strong id="startGuideTitle">Click map to place shore or boat waypoint</strong>
         <p id="startHint" class="helper">Click or tap the location on the map, or enter GPS coordinates.</p>
         <label for="startName" class="label">Point name</label><input class="input" id="startName" maxlength="65" value="Shore entry" placeholder="Example: Pritchard Island entry">
         <div class="two"><div><label for="startLat" class="label">Latitude</label><input id="startLat" class="input" type="number" step="any" placeholder="47.523426"></div><div><label for="startLng" class="label">Longitude</label><input id="startLng" class="input" type="number" step="any" placeholder="-122.257050"></div></div>
@@ -81,7 +91,7 @@
     </div>
     <div class="two"><div><label for="speed" class="label">Speed (ft/min)</label><input class="input" id="speed" type="number" min="20" max="800" step="5" value="175"></div><div><label for="reserve" class="label">Extra time / stop (min)</label><input class="input" id="reserve" type="number" min="0" max="120" step="1" value="0"></div></div>
     <div class="metricgrid"><div class="metric"><label>Total distance</label><strong id="totalDist">0 ft</strong></div><div class="metric"><label>Transit time</label><strong id="totalTime">0:00</strong></div><div class="metric"><label>Legs</label><strong id="totalLegs">0</strong></div><div class="metric"><label>With stop allowance</label><strong id="withStops">0:00</strong></div></div>
-    <p class="helper">Click or tap an open spot on the map to add a waypoint at that location. Click a wreck in Draw mode to add it directly. Shore entry and Boat drop remain dedicated starting points.</p>
+    <p class="helper">Click or tap open water to extend the route, or select a wreck in Draw mode. Drag any numbered route marker to fine-tune its position; click or right-click it to rename, classify as shore/boat, or move it by clicking the map.</p>
     <div class="group"><button id="drawRoute" class="btn primary">Draw route: OFF</button><button id="undo" class="btn">Undo last</button><button id="reverse" class="btn">Reverse</button><button id="clear" class="btn danger">Clear route</button></div>
     <div id="stops"></div>
     <hr class="sep"><div class="group"><button class="btn" id="saveRoute">Save route</button><button class="btn" id="loadRoute">Load saved</button><button class="btn" id="downloadGPX">Export GPX</button><button class="btn" id="downloadCSV">Export CSV</button></div>
@@ -90,14 +100,23 @@
   </div>
  </aside>
  <main class="mapwrap" aria-label="Map and wrecks">
-  <div id="map" title="Click or tap an empty location to add a route waypoint; drag to pan"><div id="world"></div><div class="zoomCtrls"><button id="zoomIn" title="Zoom in">+</button><button id="zoomOut" title="Zoom out">−</button></div><div class="credits">Base: © OpenStreetMap / Esri · Lake Washington survey bathymetry</div></div>
+  <div id="map" title="Click to add a waypoint; drag to pan; drag a numbered waypoint to reposition"><div id="world"></div><div class="zoomCtrls"><button id="zoomIn" title="Zoom in">+</button><button id="zoomOut" title="Zoom out">−</button></div><div class="credits">Base: © OpenStreetMap / Esri · Lake Washington survey bathymetry</div></div>
 
-  <div class="mapcontrols"><button id="bathy" class="mapbtn active" aria-pressed="true">Bathymetry ON</button><button id="basemap" class="mapbtn active" aria-pressed="true">Streets ON</button><button id="startOnMap" class="mapbtn" title="Mark a shore entry point">+ Start point</button><button id="draw" class="mapbtn" aria-pressed="false">Draw route OFF</button><button id="fit" class="mapbtn">Fit route</button></div>
+  <div class="mapcontrols"><button id="bathy" class="mapbtn active" aria-pressed="true">Bathymetry ON</button><button id="basemap" class="mapbtn active" aria-pressed="true">Streets ON</button><button id="startOnMap" class="mapbtn" title="Add a shore entry or exit waypoint">+ Shore</button><button id="boatOnMap" class="mapbtn" title="Add a boat drop or pickup waypoint">+ Boat</button><button id="draw" class="mapbtn" aria-pressed="false">Draw route OFF</button><button id="fit" class="mapbtn">Fit route</button></div>
+  <div id="pointMenu" class="point-menu" role="group" aria-label="Route waypoint actions" hidden>
+    <div class="point-menu-header"><strong id="pointMenuTitle">Waypoint</strong><button id="pointMenuClose" type="button" aria-label="Close waypoint menu">×</button></div>
+    <div id="pointMenuGPS" class="point-menu-gps"></div>
+    <label for="pointKind" class="label">Point type</label>
+    <select id="pointKind" class="input"><option value="waypoint">Regular waypoint / wreck</option><option value="shore">Shore entry / exit</option><option value="boat">Boat drop / pickup</option></select>
+    <label for="pointName" class="label">Point name</label><input id="pointName" class="input" maxlength="65">
+    <div class="group"><button id="pointMove" class="btn small primary" type="button">Move by map click</button><button id="pointRemove" class="btn small danger" type="button">Remove</button></div>
+    <p class="helper">Drag a numbered route marker to fine-tune its position.</p>
+   </div>
   <div class="mapnote" id="mapMessage" role="status">Click an open spot to add a waypoint. Click a wreck for details, or enable Draw route to connect wrecks.</div>
  </main>
 </div>
 <script>
-/* RunTime DPV Planner V8. Data source and licensing details are retained in README.md. */
+/* RunTime DPV Planner V9. Data source and licensing details are retained in README.md. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const MARKERS='https://raw.githubusercontent.com/archisgore/dive-site-markers/master/markers.json';
@@ -121,34 +140,62 @@ const fallback=[
  {id:'LW583',name:'City Of Blaine',lat:47.526367,lng:-122.251633,depth:-34.6,explored:'YES'}
 ];
 let catalog=fallback.map(norm), route=[], current=null, draw=false, showBathy=true, showBase=true, startMode=null;
+let pointMenuIndex=null, movingPointIndex=null, pointDrag=null, hoverPoint=null, position=null, moved=false;
 let center={lat:47.5233,lng:-122.2547},zoom=15, tileNodes=new Map(), run=0,pan=null,loaded={base:0,bathy:0,baseFailed:0,bathyFailed:0};
 const world=$('world'),canvas=$('map');
 function norm(w){return {...w,id:String(w.id),name:String(w.name||w.id),lat:Number(w.lat),lng:Number(w.lng),depth:w.depth==null?NaN:Number(w.depth)};}
 function display(w){return String(w?.name||w?.id||'Waypoint').replace(/<[^>]*>/g,'').trim();}
 function isStart(w){return w?.kind==='shore'||w?.kind==='boat';}
 function startDefault(k){return k==='boat'?'Boat drop':'Shore entry';}
-function finishStart(){startMode=null;$('startGuide').hidden=true;$('startOnMap').classList.remove('active');$('startOnMap').textContent='+ Start point';$('shoreStart').classList.remove('active');$('boatStart').classList.remove('active');canvas.classList.remove('placing-start');}
+function finishStart(){
+ startMode=null;$('startGuide').hidden=true;
+ for(const id of ['startOnMap','boatOnMap','shoreStart','boatStart'])$(id).classList.remove('active');
+ $('startOnMap').textContent='+ Shore';$('boatOnMap').textContent='+ Boat';canvas.classList.remove('placing-start');
+}
 function beginStart(kind){
- if(startMode===kind){finishStart();notify('Start-point placement cancelled.');return;}
+ if(startMode===kind){finishStart();notify('Waypoint placement cancelled.');return;}
  if(draw)drawState(false);
- startMode=kind;
- const previous=isStart(route[0])?route[0]:null;
- $('startName').value=previous&&previous.kind===kind?display(previous):startDefault(kind);
- $('startLat').value='';$('startLng').value='';
- $('startGuideTitle').textContent='Tap or click map to place '+(kind==='boat'?'boat drop':'shore entry');
- $('startHint').textContent='Tap the location on the map. You can also enter GPS coordinates below.';
- $('startGuide').hidden=false;$('shoreStart').classList.toggle('active',kind==='shore');$('boatStart').classList.toggle('active',kind==='boat');
- $('startOnMap').classList.add('active');$('startOnMap').textContent='Cancel start';canvas.classList.add('placing-start');
- switchTab('route');notify('Place '+startDefault(kind)+' by clicking the map, or enter latitude and longitude.');
+ movingPointIndex=null;canvas.classList.remove('relocating-point');hideMenu();
+ startMode=kind;$('startName').value=startDefault(kind);$('startLat').value='';$('startLng').value='';
+ $('startGuideTitle').textContent='Click map to add '+startDefault(kind).toLowerCase()+' as the next route waypoint';
+ $('startHint').textContent='Click a map location, or enter latitude and longitude below. This point will be appended to the route.';
+ $('startGuide').hidden=false;
+ $('shoreStart').classList.toggle('active',kind==='shore');$('boatStart').classList.toggle('active',kind==='boat');
+ $('startOnMap').classList.toggle('active',kind==='shore');$('boatOnMap').classList.toggle('active',kind==='boat');
+ canvas.classList.add('placing-start');switchTab('route');
+ notify('Click the map to add '+startDefault(kind).toLowerCase()+' as waypoint '+(route.length+1)+'.');
 }
 function placeStart(lat,lng){
  if(!startMode)return;
  lat=Number(lat);lng=Number(lng);
- if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat < -90||lat > 90||lng < -180||lng > 180){$('startHint').textContent='Invalid coordinates. Enter latitude between -90 and 90 and longitude between -180 and 180.';notify('Invalid starting-point coordinates.');return;}
- const name=$('startName').value.trim()||startDefault(startMode),kind=startMode;
- const p={id:'START-'+kind.toUpperCase()+'-'+Date.now(),name,kind,lat,lng,depth:NaN};
- if(isStart(route[0]))route[0]=p;else route.unshift(p);
- finishStart();drawRoute();switchTab('route');notify(name+' set as waypoint 1. Route distances and times updated.');
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat < -90||lat > 90||lng < -180||lng > 180){$('startHint').textContent='Invalid coordinates. Enter latitude between -90 and 90 and longitude between -180 and 180.';notify('Invalid waypoint coordinates.');return;}
+ const kind=startMode,name=$('startName').value.trim()||startDefault(kind);
+ route.push({id:'POINT-'+kind.toUpperCase()+'-'+Date.now()+'-'+Math.floor(Math.random()*1e6),name,kind,lat,lng,depth:NaN});
+ finishStart();drawRoute();switchTab('route');notify(name+' added as waypoint '+route.length+'.');
+}
+function heading(v){return String(Math.round(v)%360).padStart(3,'0')+'°T';}
+function hideMenu(){pointMenuIndex=null;$('pointMenu').hidden=true;}
+function showPointMenu(i){
+ if(i<0||i>=route.length)return;
+ pointMenuIndex=i;const p=route[i],xy=project(p),menu=$('pointMenu');
+ $('pointMenuTitle').textContent='Waypoint '+(i+1)+' · '+display(p);
+ $('pointMenuGPS').textContent=p.lat.toFixed(6)+', '+p.lng.toFixed(6);
+ $('pointKind').value=isStart(p)?p.kind:'waypoint';
+ $('pointName').value=display(p);menu.hidden=false;
+ const x=Math.max(8,Math.min(canvas.clientWidth-menu.offsetWidth-8,xy.x+16));
+ const y=Math.max(8,Math.min(canvas.clientHeight-menu.offsetHeight-8,xy.y+13));
+ menu.style.left=x+'px';menu.style.top=y+'px';
+}
+function beginMove(i){
+ if(i<0||i>=route.length)return;
+ finishStart();movingPointIndex=i;hideMenu();canvas.classList.add('relocating-point');
+ switchTab('route');notify('Move waypoint '+(i+1)+': click its new position on the map, or drag its numbered marker.');
+}
+function relocate(i,lat,lng){
+ if(!route[i])return;
+ route[i].lat=lat;route[i].lng=lng;
+ if(!isStart(route[i])&&!String(route[i].id).startsWith('WP-')&&!String(route[i].id).startsWith('POINT-'))route[i].kind='waypoint';
+ drawRoute();
 }
 
 function clean(v){return String(v??'').replace(/<[^>]*>/g,'').replace(/undefined/gi,'').trim();}
@@ -187,24 +234,63 @@ function renderTiles(){let w=canvas.clientWidth,h=canvas.clientHeight;if(w<20||h
  renderGraphics();status();
 }
 function intersectsLake(x,y,z){let a=latLng(x*256,(y+1)*256,z),b=latLng((x+1)*256,y*256,z);return b.lat>=bounds[0][0]&&a.lat<=bounds[1][0]&&b.lng>=bounds[0][1]&&a.lng<=bounds[1][1];}
-function renderGraphics(){world.querySelectorAll('.geometry,.pin-marker,.line-label,.point-label').forEach(x=>x.remove());let w=canvas.clientWidth,h=canvas.clientHeight;
+function renderGraphics(){
+ world.querySelectorAll('.geometry,.pin-marker,.line-label,.point-label,.preview-label').forEach(x=>x.remove());
+ let w=canvas.clientWidth,h=canvas.clientHeight;
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','geometry');svg.setAttribute('width',w);svg.setAttribute('height',h);world.appendChild(svg);
- if(route.length>1){let poly=document.createElementNS(svg.namespaceURI,'polyline');poly.setAttribute('points',route.map(o=>{let p=project(o);return p.x+','+p.y}).join(' '));poly.setAttribute('fill','none');poly.setAttribute('stroke','#072f33');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
- let line=poly.cloneNode();line.setAttribute('stroke','#6ef0c1');line.setAttribute('stroke-width','4');svg.appendChild(line);
- for(let i=1;i<route.length;i++){let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;if(x<-100||x>w+100||y<-50||y>h+50)continue;let label=create('div','line-label',feet(dist(route[i-1],route[i]))+' · '+tm(dist(route[i-1],route[i])/speed()));label.style.left=x+'px';label.style.top=y+'px';world.appendChild(label);}}
- let routed=new Set(route.map(x=>x.id));
- for(const p of catalog){const a=project(p);if(a.x<-30||a.y<-30||a.x>w+30||a.y>h+30)continue;let button=create('button','pin-marker'+(isNamed(p)?' named':'')+(routed.has(p.id)?' stop':'')+(current?.id===p.id?' active':''));button.title=display(p)+' · '+p.id+' · '+depth(p);button.setAttribute('aria-label',button.title);button.style.left=a.x+'px';button.style.top=a.y+'px';button.dataset.wreckId=p.id;button.addEventListener('click',e=>{e.stopPropagation();if(draw){add(p);}else{choose(p,false);}});world.appendChild(button);}
- for(let i=0;i<route.length;i++){
- let p=route[i],a=project(p);if(a.x<-20||a.y<-20||a.x>w+20||a.y>h+20)continue;
- if(String(p.id).startsWith('WP-')||isStart(p)){
-  const start=isStart(p),dot=create('button',start?'pin-marker start-marker '+p.kind:'pin-marker stop',start?(p.kind==='boat'?'B':'S'):'');
-  dot.title=display(p)+' · '+p.lat.toFixed(6)+', '+p.lng.toFixed(6);dot.setAttribute('aria-label',dot.title);dot.style.left=a.x+'px';dot.style.top=a.y+'px';
-  dot.addEventListener('click',e=>{e.stopPropagation();if(start){switchTab('route');notify('Start point selected. Rename it in the Route list or choose Move.');}else{switchTab('route');notify('Waypoint selected. Rename or remove it in the route list.');}});world.append(dot);
+ if(route.length>1){
+  let poly=document.createElementNS(svg.namespaceURI,'polyline');
+  poly.setAttribute('points',route.map(o=>{let p=project(o);return p.x+','+p.y}).join(' '));
+  poly.setAttribute('fill','none');poly.setAttribute('stroke','#072f33');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
+  let line=poly.cloneNode();line.setAttribute('stroke','#6ef0c1');line.setAttribute('stroke-width','4');svg.appendChild(line);
+  for(let i=1;i<route.length;i++){
+   let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;
+   if(x<-100||x>w+100||y<-50||y>h+50)continue;
+   const d=dist(route[i-1],route[i]),label=create('div','line-label',heading(bearing(route[i-1],route[i]))+' · '+feet(d)+' · '+tm(d/speed()));
+   label.style.left=x+'px';label.style.top=y+'px';world.appendChild(label);
+  }
  }
- let label=create('div','point-label',String(i+1)+' '+display(p));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);
+ const routed=new Set(route.map(x=>x.id));
+ for(const p of catalog){
+  const a=project(p);if(a.x<-30||a.y<-30||a.x>w+30||a.y>h+30)continue;
+  let button=create('button','pin-marker'+(isNamed(p)?' named':'')+(routed.has(p.id)?' stop':'')+(current?.id===p.id?' active':''));
+  button.title=display(p)+' · '+p.id+' · '+depth(p);button.setAttribute('aria-label',button.title);
+  button.style.left=a.x+'px';button.style.top=a.y+'px';button.dataset.wreckId=p.id;
+  button.addEventListener('click',e=>{e.stopPropagation();if(startMode){notify('Click open map water or use coordinates to place '+startDefault(startMode)+'.');return;}if(draw)add(p);else choose(p,false);});
+  world.appendChild(button);
+ }
+ for(let i=0;i<route.length;i++){
+  const p=route[i],a=project(p);if(a.x<-25||a.y<-25||a.x>w+25||a.y>h+25)continue;
+  const dot=create('button','pin-marker route-pin'+(isStart(p)?' '+p.kind:''),String(i+1));
+  dot.title='Waypoint '+(i+1)+': '+display(p)+' · drag to move, click or right-click for options';
+  dot.setAttribute('aria-label',dot.title);dot.style.left=a.x+'px';dot.style.top=a.y+'px';
+  dot.addEventListener('pointerdown',e=>{
+   if(e.button!==0)return;
+   e.preventDefault();e.stopPropagation();hideMenu();hoverPoint=null;
+   pointDrag={index:i,pointerId:e.pointerId,x:e.clientX,y:e.clientY,moved:false,lat:p.lat,lng:p.lng};
+   try{canvas.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  dot.addEventListener('click',e=>{e.stopPropagation();if(!pointDrag)showPointMenu(i);});
+  dot.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();showPointMenu(i);});
+  dot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='F10'){e.preventDefault();showPointMenu(i);}});
+  world.appendChild(dot);
+  let label=create('div','point-label',String(i+1)+' '+display(p));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);
+ }
+ renderPreview();
 }
+function renderPreview(){
+ world.querySelectorAll('.preview-label').forEach(x=>x.remove());
+ const svg=world.querySelector('svg.geometry');if(svg)svg.querySelectorAll('.preview-line').forEach(x=>x.remove());
+ if(!svg||!draw||!route.length||!hoverPoint||pointDrag||position||startMode||movingPointIndex!==null)return;
+ const from=route[route.length-1],a=project(from),b=project(hoverPoint),d=dist(from,hoverPoint);
+ const line=document.createElementNS(svg.namespaceURI,'line');
+ line.setAttribute('class','preview-line');line.setAttribute('x1',a.x);line.setAttribute('y1',a.y);
+ line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('stroke','#f7c778');
+ line.setAttribute('stroke-width','3');line.setAttribute('stroke-dasharray','7 6');svg.appendChild(line);
+ const label=create('div','preview-label',heading(bearing(from,hoverPoint))+' · '+feet(d)+' · '+tm(d/speed()));
+ label.style.left=((a.x+b.x)/2)+'px';label.style.top=((a.y+b.y)/2)+'px';world.appendChild(label);
 }
-function refresh(){renderTiles();}
+function refresh(){hideMenu();hoverPoint=null;renderTiles();}
 function switchTab(tab){let r=tab==='route';$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;}
 function choose(w,fly=true){current=w;$('feature').classList.add('show');$('featureName').textContent=display(w);$('featureSub').textContent=w.id+' · '+depth(w)+' · '+(w.explored==='YES'?'Explored':'Unconfirmed');$('featureDesc').textContent=clean(w.desc)||'No description available';
  $('featureDetails').replaceChildren();[['GPS',w.lat.toFixed(6)+', '+w.lng.toFixed(6)],['Alias',clean(w.alias)||'—'],['Documented',w.documented||'Unknown'],['Identified',w.identified||'Unknown'],['Fragile',w.fragile||'Unknown']].forEach(([k,v])=>{$('featureDetails').append(create('span','',k),create('span','',v));});
@@ -221,24 +307,30 @@ function placeWaypoint(lat,lng){
  add(waypoint);
  notify(name+' added at '+waypoint.lat.toFixed(6)+', '+waypoint.lng.toFixed(6)+'. Rename it in the route list.');
 }
-function drawRoute(){let list=$('stops');list.replaceChildren();$('routeCount').textContent='('+route.length+')';let distance=0;if(!route.length)list.append(create('p','helper','Click any open spot on the map to add a waypoint, or choose a wreck marker.'));
- route.forEach((w,i)=>{let row=create('div','leg'+(isStart(w)?' start-row':String(w.id).startsWith('WP-')?' custom-row':'')),top=create('div','leghead');top.append(create('span','index',String(i+1)),create('span','legtitle',display(w)));let rm=create('button','legbtn','×');rm.title='Remove stop';rm.onclick=()=>{route.splice(i,1);drawRoute();};top.append(rm);row.append(top);
- if(isStart(w)){
-  const gps=create('div','start-gps',(w.kind==='boat'?'Boat drop · ':'Shore entry · ')+w.lat.toFixed(6)+', '+w.lng.toFixed(6));row.append(gps);
-  const edit=create('div','start-edit'),nameInput=create('input','input');nameInput.value=display(w);nameInput.maxLength=65;nameInput.setAttribute('aria-label','Rename starting point');nameInput.title='Edit starting-point name';
-  nameInput.addEventListener('change',()=>{w.name=nameInput.value.trim()||startDefault(w.kind);drawRoute();});
-  const move=create('button','legbtn','Move');move.type='button';move.title='Place this starting point at a new location';move.addEventListener('click',()=>beginStart(w.kind));
-  edit.append(nameInput,move);row.append(edit);
- }else if(String(w.id).startsWith('WP-')){
-  row.append(create('div','start-gps','Custom waypoint · '+w.lat.toFixed(6)+', '+w.lng.toFixed(6)));
-  const edit=create('div','start-edit'),nameInput=create('input','input');nameInput.value=display(w);nameInput.maxLength=65;
-  nameInput.setAttribute('aria-label','Rename '+display(w));nameInput.title='Rename custom waypoint';
-  nameInput.addEventListener('change',()=>{w.name=nameInput.value.trim()||'Waypoint';drawRoute();});
-  edit.append(nameInput);row.append(edit);
- }
- if(i){let d=dist(route[i-1],w);distance+=d;row.append(create('div','legsub',feet(d)+' · '+bearing(route[i-1],w).toFixed(0)+'° TRUE · '+tm(d/speed())));}else row.append(create('div','legsub','Starting waypoint'));list.append(row);});
- $('totalDist').textContent=feet(distance);$('totalTime').textContent=tm(distance/speed());$('totalLegs').textContent=Math.max(0,route.length-1);$('withStops').textContent=tm(distance/speed()+extra()*Math.max(0,route.length-1));renderGraphics();}
-function drawState(on){if(on&&startMode)finishStart();draw=on;for(let k of ['draw','drawRoute']){let b=$(k);b.classList.toggle('active',draw);b.textContent='Draw route '+(draw?'ON':'OFF');b.setAttribute('aria-pressed',String(draw));}notify(draw?'Draw ON: click wreck markers to extend the route, or click any open spot for a waypoint.':'Draw OFF: click wrecks for details. Clicking open map still adds a waypoint.');}
+function drawRoute(){
+ const list=$('stops');list.replaceChildren();$('routeCount').textContent='('+route.length+')';let distance=0;
+ if(!route.length)list.append(create('p','helper','Find a wreck or click the map to add a waypoint. A shore/boat point can be added at the beginning or end.'));
+ route.forEach((w,i)=>{
+  const custom=w.kind==='waypoint'||String(w.id).startsWith('WP-')||String(w.id).startsWith('POINT-');
+  const row=create('div','leg'+(isStart(w)?' start-row':custom?' custom-row':''));
+  const top=create('div','leghead');top.append(create('span','index',String(i+1)),create('span','legtitle',display(w)));
+  const rm=create('button','legbtn','×');rm.title='Remove waypoint';rm.onclick=()=>{hideMenu();route.splice(i,1);drawRoute();};top.append(rm);row.append(top);
+  const type=isStart(w)?(w.kind==='boat'?'Boat drop / pickup':'Shore entry / exit'):(w.kind==='waypoint'||String(w.id).startsWith('WP-')?'Waypoint':'Wreck marker');
+  row.append(create('div','start-gps',type+' · '+w.lat.toFixed(6)+', '+w.lng.toFixed(6)));
+  const edit=create('div','start-edit'),nameInput=create('input','input');
+  nameInput.value=display(w);nameInput.maxLength=65;nameInput.setAttribute('aria-label','Rename waypoint '+(i+1));
+  nameInput.addEventListener('change',()=>{w.name=nameInput.value.trim()||'Waypoint '+(i+1);drawRoute();});
+  const move=create('button','legbtn','Move');move.type='button';move.title='Move waypoint '+(i+1)+' to a new map location';move.onclick=()=>beginMove(i);
+  const options=create('button','legbtn','Type');options.type='button';options.title='Choose shore entry, boat drop or waypoint';options.onclick=()=>showPointMenu(i);
+  edit.append(nameInput,move,options);row.append(edit);
+  if(i){const d=dist(route[i-1],w);distance+=d;row.append(create('div','legsub',feet(d)+' · '+heading(bearing(route[i-1],w))+' · '+tm(d/speed())));}
+  else row.append(create('div','legsub','First waypoint'));
+  list.append(row);
+ });
+ $('totalDist').textContent=feet(distance);$('totalTime').textContent=tm(distance/speed());$('totalLegs').textContent=Math.max(0,route.length-1);
+ $('withStops').textContent=tm(distance/speed()+extra()*Math.max(0,route.length-1));renderGraphics();
+}
+function drawState(on){if(on&&startMode)finishStart();if(on&&movingPointIndex!==null){movingPointIndex=null;canvas.classList.remove('relocating-point');}draw=on;for(let k of ['draw','drawRoute']){let b=$(k);b.classList.toggle('active',draw);b.textContent='Draw route '+(draw?'ON':'OFF');b.setAttribute('aria-pressed',String(draw));}notify(draw?'Draw ON: click wreck markers to extend the route, or click any open spot for a waypoint.':'Draw OFF: click wrecks for details. Click open map to add a waypoint, or drag a numbered route marker to move it.');}
 function zoomTo(z){if(z===zoom||z<9||z>19)return;zoom=z;refresh();}
 function fit(){if(route.length===0){center={lat:47.6265,lng:-122.2948};zoom=11;}else if(route.length===1){center={lat:route[0].lat,lng:route[0].lng};zoom=16;}else{let n=Math.min(...route.map(w=>w.lat)),s=Math.max(...route.map(w=>w.lat)),e=Math.max(...route.map(w=>w.lng)),w=Math.min(...route.map(w=>w.lng));center={lat:(n+s)/2,lng:(e+w)/2};zoom=16;for(let z=19;z>=9;z--){zoom=z;let pts=route.map(project);if(pts.every(p=>p.x>80&&p.x<canvas.clientWidth-80&&p.y>80&&p.y<canvas.clientHeight-80))break;}}refresh();}
 function saveFile(name,text,mime){let u=URL.createObjectURL(new Blob([text],{type:mime})),a=create('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
@@ -253,7 +345,14 @@ function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']]
  $('diamond').onclick=()=>{center={lat:47.522335,lng:-122.253021};zoom=16;refresh();drawList();notify('Map centered on Dawn area.');};$('entire').onclick=()=>{center={lat:47.6265,lng:-122.2948};zoom=11;refresh();drawList();};$('refresh').onclick=loadCatalog;
  $('featureAdd').onclick=()=>{if(current)add(current);};$('featureZoom').onclick=()=>{if(current){center={lat:current.lat,lng:current.lng};zoom=17;refresh();}};
  $('zoomIn').onclick=()=>zoomTo(zoom+1);$('zoomOut').onclick=()=>zoomTo(zoom-1);$('draw').onclick=()=>drawState(!draw);$('drawRoute').onclick=()=>drawState(!draw);$('fit').onclick=fit;
- $('shoreStart').onclick=()=>beginStart('shore');$('boatStart').onclick=()=>beginStart('boat');$('startOnMap').onclick=()=>{if(startMode){finishStart();notify('Start-point placement cancelled.');}else beginStart('shore');};
+ $('shoreStart').onclick=()=>beginStart('shore');$('boatStart').onclick=()=>beginStart('boat');$('startOnMap').onclick=()=>beginStart('shore');$('boatOnMap').onclick=()=>beginStart('boat');
+ $('pointMenuClose').onclick=hideMenu;
+ $('pointKind').onchange=()=>{if(pointMenuIndex===null)return;const i=pointMenuIndex,p=route[i],kind=$('pointKind').value,old=p.kind;
+  p.kind=kind;if(old!==kind&&/^(Shore entry|Boat drop|Waypoint \d+)$/i.test(p.name))p.name=kind==='waypoint'?'Waypoint '+(i+1):startDefault(kind);
+  hideMenu();drawRoute();notify('Waypoint '+(i+1)+' set to '+(kind==='waypoint'?'regular waypoint':startDefault(kind).toLowerCase())+'.');};
+ $('pointName').onchange=()=>{if(pointMenuIndex===null)return;const i=pointMenuIndex;route[i].name=$('pointName').value.trim()||'Waypoint '+(i+1);hideMenu();drawRoute();};
+ $('pointMove').onclick=()=>{if(pointMenuIndex!==null)beginMove(pointMenuIndex);};
+ $('pointRemove').onclick=()=>{if(pointMenuIndex===null)return;const i=pointMenuIndex;hideMenu();route.splice(i,1);drawRoute();notify('Waypoint '+(i+1)+' removed.');};
  $('cancelStart').onclick=()=>{finishStart();notify('Start-point placement cancelled.');};
  $('startFromGPS').onclick=()=>{
   const lat=$('startLat').value.trim(),lng=$('startLng').value.trim();
@@ -262,21 +361,65 @@ function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']]
  };
  $('bathy').onclick=()=>{showBathy=!showBathy;let b=$('bathy');b.classList.toggle('active',showBathy);b.textContent='Bathymetry '+(showBathy?'ON':'OFF');b.setAttribute('aria-pressed',String(showBathy));refresh();};
  $('basemap').onclick=()=>{showBase=!showBase;let b=$('basemap');b.classList.toggle('active',showBase);b.textContent='Streets '+(showBase?'ON':'OFF');b.setAttribute('aria-pressed',String(showBase));refresh();};
- $('speed').oninput=drawRoute;$('reserve').oninput=drawRoute;$('undo').onclick=()=>{route.pop();drawRoute();};$('reverse').onclick=()=>{route.reverse();drawRoute();};$('clear').onclick=()=>{route=[];drawRoute();};
+ $('speed').oninput=drawRoute;$('reserve').oninput=drawRoute;$('undo').onclick=()=>{hideMenu();route.pop();drawRoute();};$('reverse').onclick=()=>{hideMenu();route.reverse();drawRoute();};$('clear').onclick=()=>{hideMenu();route=[];drawRoute();};
  $('saveRoute').onclick=()=>{try{localStorage.setItem(SAVEKEY,JSON.stringify({route,name:$('routeName').value,speed:speed(),reserve:extra()}));notify('Route saved on this device.');}catch(e){notify('Saving was blocked. Use GPX export.');}};
- $('loadRoute').onclick=()=>{let data;try{data=JSON.parse(localStorage.getItem(SAVEKEY));}catch(e){}if(!data?.route){notify('No saved route found on this device.');return;}route=data.route.map(norm);$('routeName').value=data.name;$('speed').value=data.speed;$('reserve').value=data.reserve;drawRoute();fit();notify('Saved route loaded.');};
+ $('loadRoute').onclick=()=>{hideMenu();movingPointIndex=null;canvas.classList.remove('relocating-point');let data;try{data=JSON.parse(localStorage.getItem(SAVEKEY));}catch(e){}if(!data?.route){notify('No saved route found on this device.');return;}route=data.route.map(norm);$('routeName').value=data.name;$('speed').value=data.speed;$('reserve').value=data.reserve;drawRoute();fit();notify('Saved route loaded.');};
  $('downloadCSV').onclick=csv;$('downloadGPX').onclick=gpx;
- let position=null,moved=false;
- canvas.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;position={x:e.clientX,y:e.clientY,from:tileXY(center.lat,center.lng,zoom)};moved=false;canvas.classList.add('dragging');canvas.setPointerCapture(e.pointerId);});
- canvas.addEventListener('pointermove',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;world.style.transform=`translate(${dx}px,${dy}px)`;});
- canvas.addEventListener('pointerup',e=>{if(!position)return;let dx=e.clientX-position.x,dy=e.clientY-position.y;let wasMoved=moved;let orig=position;position=null;canvas.classList.remove('dragging');world.style.transform='';if(wasMoved){center=latLng(orig.from.x-dx,orig.from.y-dy,zoom);refresh();drawList();}else if(startMode&&!e.target.closest('button,a')){
- let rect=canvas.getBoundingClientRect(),p=unproject(e.clientX-rect.left,e.clientY-rect.top);placeStart(p.lat,p.lng);
-}else if(!e.target.closest('button,a')){let rect=canvas.getBoundingClientRect();let p=unproject(e.clientX-rect.left,e.clientY-rect.top);placeWaypoint(p.lat,p.lng);}try{canvas.releasePointerCapture(e.pointerId)}catch(err){};});
- canvas.addEventListener('pointercancel',()=>{position=null;canvas.classList.remove('dragging');world.style.transform='';});
+ canvas.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button,a,input,select'))return;
+  hideMenu();hoverPoint=null;
+  position={x:e.clientX,y:e.clientY,from:tileXY(center.lat,center.lng,zoom)};moved=false;
+  canvas.classList.add('dragging');try{canvas.setPointerCapture(e.pointerId);}catch(err){}
+ });
+ canvas.addEventListener('pointermove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  if(pointDrag){
+   if(pointDrag.pointerId!==e.pointerId)return;
+   if(Math.abs(e.clientX-pointDrag.x)+Math.abs(e.clientY-pointDrag.y)>4)pointDrag.moved=true;
+   if(pointDrag.moved){
+    const p=unproject(e.clientX-rect.left,e.clientY-rect.top),target=route[pointDrag.index];
+    if(target){target.lat=p.lat;target.lng=p.lng;renderGraphics();}
+   }
+   return;
+  }
+  if(position){let dx=e.clientX-position.x,dy=e.clientY-position.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;world.style.transform=`translate(${dx}px,${dy}px)`;return;}
+  hoverPoint=unproject(e.clientX-rect.left,e.clientY-rect.top);renderPreview();
+ });
+ canvas.addEventListener('pointerup',e=>{
+  if(pointDrag){
+   if(e.pointerId!==pointDrag.pointerId)return;
+   const drag=pointDrag;pointDrag=null;
+   try{canvas.releasePointerCapture(e.pointerId)}catch(err){}
+   if(drag.moved){
+    const p=route[drag.index];if(p&&!isStart(p)&&!String(p.id).startsWith('WP-')&&!String(p.id).startsWith('POINT-'))p.kind='waypoint';
+    drawRoute();notify('Waypoint '+(drag.index+1)+' repositioned. Bearings and leg distances recalculated.');
+   }else showPointMenu(drag.index);
+   return;
+  }
+  if(!position)return;
+  const dx=e.clientX-position.x,dy=e.clientY-position.y,wasMoved=moved,orig=position;
+  position=null;canvas.classList.remove('dragging');world.style.transform='';
+  if(wasMoved){center=latLng(orig.from.x-dx,orig.from.y-dy,zoom);refresh();drawList();}
+  else if(!e.target.closest('button,a,input,select')){
+   const rect=canvas.getBoundingClientRect(),p=unproject(e.clientX-rect.left,e.clientY-rect.top);
+   if(movingPointIndex!==null){
+    const i=movingPointIndex;movingPointIndex=null;canvas.classList.remove('relocating-point');relocate(i,p.lat,p.lng);
+    notify('Waypoint '+(i+1)+' moved. Bearings and distances recalculated.');
+   }else if(startMode)placeStart(p.lat,p.lng);
+   else placeWaypoint(p.lat,p.lng);
+  }
+  try{canvas.releasePointerCapture(e.pointerId)}catch(err){}
+ });
+ canvas.addEventListener('pointercancel',()=>{
+  if(pointDrag){const p=route[pointDrag.index];if(p){p.lat=pointDrag.lat;p.lng=pointDrag.lng;}pointDrag=null;drawRoute();}
+  position=null;canvas.classList.remove('dragging');world.style.transform='';
+ });
+ canvas.addEventListener('pointerleave',()=>{if(!pointDrag&&!position){hoverPoint=null;renderPreview();}});
+ canvas.addEventListener('contextmenu',e=>{if(!e.target.closest('.route-pin'))e.preventDefault();});
  canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTo(zoom+(e.deltaY<0?1:-1));},{passive:false});
  window.addEventListener('resize',()=>{clearTimeout(window.__resizeMap);window.__resizeMap=setTimeout(refresh,160);});
  }
 wire();refresh();drawList();drawRoute();loadCatalog();
-window.__runtimeDPV={dist,bearing,add,placeWaypoint,route:()=>route,center:()=>center,zoom:()=>zoom,refresh,beginStart,placeStart};
+window.__runtimeDPV={dist,bearing,heading,add,placeWaypoint,route:()=>route,center:()=>center,zoom:()=>zoom,refresh,beginStart,placeStart,relocate,showPointMenu};
 })();
 </script></body></html>
