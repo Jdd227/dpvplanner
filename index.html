@@ -131,12 +131,27 @@ html,body{background:var(--bg);color:var(--ink)}
 .point-menu .btn.primary{background:#e8e9e7;color:#11171c}
 @media(max-width:840px){.runtime-brand img{height:31px}.mapcontrols{gap:5px}.mapcontrols .mapbtn{padding:8px}}
 
+
+/* V11: restore color to the cartography only; all interface controls remain RunTime monochrome. */
+.mapwrap,#map,.map-tile{background:#a8cfda}
+.map-tile.base img{filter:none;opacity:1}
+.map-tile.bathy img{filter:none;opacity:.88}
+.pin-marker{background:#b2d1dc;border-color:#0b2732;box-shadow:0 0 0 1px #6e8395}
+.pin-marker.named{background:#ffd178;box-shadow:0 0 0 1px #ffd178}
+.pin-marker.active{background:#6fe6bc;border-color:#06292c;box-shadow:0 0 0 2px #6fe6bc}
+.pin-marker.stop{background:#78f0cf;box-shadow:0 0 0 2px #78f0cf}
+.pin-marker.route-pin{background:#78f0cf;color:#092e34;border-color:#0b3031;box-shadow:0 0 0 2px #edfef8}
+.pin-marker.route-pin.shore{background:#ffe3a2;box-shadow:0 0 0 2px #ffe3a2}
+.pin-marker.route-pin.boat{background:#bce4ff;box-shadow:0 0 0 2px #bce4ff}
+.line-label,.preview-label{background:#eafff6;color:#14342d;border-color:#3e7b67}
+.preview-label{border-color:#357561}
+
 </style>
 </head>
 <body>
 <div id="app">
  <aside class="side">
-  <header class="head"><a class="runtime-brand" href="https://runtimedivesystems.com/" target="_blank" rel="noopener" aria-label="RunTime Dive Systems website"><img src="https://runtimedivesystems.com/assets/runtime-logo.png" alt="RunTime Dive Systems" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span class="brand-fallback" hidden>RUNTIME / DIVE SYSTEMS</span></a><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V10</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
+  <header class="head"><a class="runtime-brand" href="https://runtimedivesystems.com/" target="_blank" rel="noopener" aria-label="RunTime Dive Systems website"><img src="https://runtimedivesystems.com/assets/runtime-logo.png" alt="RunTime Dive Systems" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span class="brand-fallback" hidden>RUNTIME / DIVE SYSTEMS</span></a><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V11</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
   <div class="tabs"><button class="tab active" id="tabExplore">Explore wrecks</button><button class="tab" id="tabRoute">Route <span id="routeCount">(0)</span></button></div>
   <div class="body">
    <section class="pane active" id="explorePane">
@@ -191,7 +206,7 @@ html,body{background:var(--bg);color:var(--ink)}
  </main>
 </div>
 <script>
-/* RunTime DPV Planner V10. Data source and licensing details are retained in README.md. */
+/* RunTime DPV Planner V11. Data source and licensing details are retained in README.md. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const MARKERS='https://raw.githubusercontent.com/archisgore/dive-site-markers/master/markers.json';
@@ -316,8 +331,8 @@ function renderGraphics(){
  if(route.length>1){
   let poly=document.createElementNS(svg.namespaceURI,'polyline');
   poly.setAttribute('points',route.map(o=>{let p=project(o);return p.x+','+p.y}).join(' '));
-  poly.setAttribute('fill','none');poly.setAttribute('stroke','#141b20');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
-  let line=poly.cloneNode();line.setAttribute('stroke','#fafbfb');line.setAttribute('stroke-width','4');svg.appendChild(line);
+  poly.setAttribute('fill','none');poly.setAttribute('stroke','#072f33');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
+  let line=poly.cloneNode();line.setAttribute('stroke','#6ef0c1');line.setAttribute('stroke-width','4');svg.appendChild(line);
   for(let i=1;i<route.length;i++){
    let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;
    if(x<-100||x>w+100||y<-50||y>h+50)continue;
@@ -360,7 +375,7 @@ function renderPreview(){
  const from=route[route.length-1],a=project(from),b=project(hoverPoint),d=dist(from,hoverPoint);
  const line=document.createElementNS(svg.namespaceURI,'line');
  line.setAttribute('class','preview-line');line.setAttribute('x1',a.x);line.setAttribute('y1',a.y);
- line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('stroke','#fafbfb');
+ line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('stroke','#f7c778');
  line.setAttribute('stroke-width','3');line.setAttribute('stroke-dasharray','7 6');svg.appendChild(line);
  const label=create('div','preview-label',heading(bearing(from,hoverPoint))+' · '+feet(d)+' · '+tm(d/speed()));
  label.style.left=((a.x+b.x)/2)+'px';label.style.top=((a.y+b.y)/2)+'px';world.appendChild(label);
