@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>RunTime Dive Systems | Lake Washington DPV Planner</title>
-<meta name="theme-color" content="#102126">
+<meta name="theme-color" content="#0c1014">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzxj9Pql8lS1s6zoREk2U6wR6A=" crossorigin="">
 <style>
 :root{color-scheme:dark;--bg:#0d191e;--panel:#14242a;--edge:#345158;--ink:#eff9f7;--muted:#a5bdbd;--mint:#70e0bd;--gold:#f7c778;--alert:#ffba80;--water:#284955}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--mint);outline-offset:2px}button:disabled{opacity:.35;cursor:not-allowed}a{color:var(--mint)}
@@ -56,12 +56,87 @@
 .start-edit{display:flex;gap:6px;align-items:center;margin:8px 0 3px 34px}.start-edit .input{min-width:0;flex:1;padding:6px 7px;min-height:33px}.start-edit .legbtn{min-height:33px}
 
 
+/* V10 · RunTime Dive Systems monochrome skin. Retains full-resolution map tiles. */
+:root{color-scheme:dark;--bg:#0c1014;--panel:#11171c;--edge:#303841;--ink:#e8e9e7;--muted:#a4adb4;--mint:#f3f4f4;--gold:#e1e4e6;--alert:#f3f4f4;--water:#aeb5b9}
+html,body{background:var(--bg);color:var(--ink)}
+.side{background:var(--panel);border-right-color:var(--edge)}
+.head{padding:16px 18px 15px;border-bottom-color:var(--edge)}
+.runtime-brand{display:inline-flex;align-items:center;min-height:38px;max-width:100%;margin:0 0 10px;text-decoration:none}
+.runtime-brand img{display:block;width:auto;height:35px;max-width:190px;object-fit:contain;object-position:left center}
+.runtime-brand .brand-fallback{color:var(--ink);font-weight:780;letter-spacing:.15em;font-size:13px}
+.head .over{color:#b8c8c9;font-size:10px;letter-spacing:.13em;font-weight:700}
+.head h1{font-size:22px;font-weight:650;letter-spacing:-.025em;margin-top:8px}
+.head .lead{color:var(--muted)}.status{color:#d7dcde}
+.tabs{border-bottom:1px solid var(--edge);padding:10px 14px}
+.tab{background:#171e23;color:#bfc7cb;border:1px solid #313c44;border-radius:5px}
+.tab.active{border-color:#a9b6bc;background:#303941;color:#fff}
+.tab:hover,.btn:hover{border-color:#ccd5d9}
+.input{background:#0b1115;border:1px solid #354149;border-radius:5px;color:#e8e9e7}
+.input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #f2f3f3;outline-offset:2px}
+.label{color:#9aa5ad}
+.btn,.legbtn{background:#1f282e;color:#e8e9e7;border:1px solid #4b565e;border-radius:5px}
+.btn.primary,.btn.active,.legbtn:hover{background:#dce1e3;color:#0c1014;border-color:#dce1e3}
+.btn.primary:hover,.btn.active:hover{background:#fff;border-color:#fff;color:#0c1014}
+.btn.danger{color:#e8e9e7;border-color:#6e7880}
+.btn.danger:hover{background:#3a3132;border-color:#d5d5d5;color:#fff}
+.pill{border-color:#5a666d;color:#b9c2c8}
+.helper{color:#a6b0b7}
+.wreck{background:#171f24;border:1px solid #333d45;border-radius:6px}
+.wreck.active{border-color:#e8e9e7;background:#293137}
+.wreck .link,.wreck .link strong{color:#e8e9e7}
+.wreck .link span{color:#a4adb4}
+.add{background:#2d363c;color:#f3f4f4;border-color:#78868d;border-radius:5px}
+.add:hover{background:#f2f4f4;color:#0c1014}
+.feature{background:#1b2227;border:1px solid #737e85;border-radius:6px}
+.feature .sub{color:#d4d9dd}.feature p{color:#bfc7cc}
+.feature .details{border-color:var(--edge)}
+.feature .details span:nth-child(odd){color:#9ba5ad}
+.metric{border:1px solid #364047;background:#192228;border-radius:5px}
+.metric strong{color:#f2f4f4;font-size:21px}
+.leg{background:#171f24;border:1px solid #344048;border-radius:5px}
+.index{background:#ecf0f1;color:#10171b}
+.legsub{color:#c8d0d4}
+.legtitle{color:#e8e9e7}
+.custom-row .index,.start-row .index{background:#d8dce0;color:#10171b}
+.custom-row .legtitle,.start-row .legtitle{color:#f1f2f2}
+.start-gps{color:#98a6ad}
+.start-panel{background:#192126;border:1px solid #47515a;border-radius:6px}
+.start-title{color:#e5e8e9}
+.start-guide{border-top-color:#39454b}.start-guide strong{color:#ecf0f1}
+.notice{color:#aab4bb;border-top:1px solid var(--edge)}
+.mapwrap,#map,.map-tile{background:#aab0b4}
+/* The cartographic rasters retain their source contrast and native depth detail. */
+.map-tile.base img{filter:grayscale(100%);opacity:.92}
+.map-tile.bathy img{filter:grayscale(100%) contrast(1.12);opacity:.88}
+.mapcontrols .mapbtn{background:#11171cf0;color:#e8e9e7;border:1px solid #66737c;border-radius:5px;box-shadow:0 2px 8px #0008}
+.mapcontrols .mapbtn.active{background:#e8e9e7;color:#11171c;border-color:#fff}
+.mapnote,.mapinfo{background:#11171cf1;color:#d5d9dc;border:1px solid #526068;border-radius:5px}
+.mapinfo strong,.mapinfo .ok,.mapinfo .fail{color:#e8e9e7}
+.zoomCtrls{background:#11171c;border-color:#505d65;border-radius:5px}
+.zoomCtrls button{background:#192126;color:#f3f4f4}
+.zoomCtrls button+button{border-top-color:#505d65}
+.credits{background:#11171ce3;color:#e8e9e7}
+.pin-marker{background:#c5ced3;border-color:#172026;box-shadow:0 0 0 1px #eef0f1}
+.pin-marker.named{background:#f0f0ed;box-shadow:0 0 0 1px #fff}
+.pin-marker.active{background:#fff;border-color:#13191e;box-shadow:0 0 0 3px #4a5961}
+.pin-marker.stop{background:#f2f2f2;box-shadow:0 0 0 2px #fff}
+.pin-marker.route-pin{background:#f8f8f8;color:#121a20;border-color:#10181e;box-shadow:0 0 0 2px #edf0f2}
+.pin-marker.route-pin.shore{background:#e1e4e5;box-shadow:0 0 0 2px #333b41}
+.pin-marker.route-pin.boat{background:#b7c1c7;box-shadow:0 0 0 2px #333b41}
+.point-label{color:#e8e9e7;background:#10171bdf}
+.line-label,.preview-label{background:#f1f3f3;color:#11191d;border:1px solid #29343b;border-radius:4px;box-shadow:0 1px 6px #0006}
+.preview-label{border-style:dashed}
+.point-menu{background:#11171c;border:1px solid #abb4ba;border-radius:6px;color:#e8e9e7}
+.point-menu-gps{color:#a4adb4}
+.point-menu .btn.primary{background:#e8e9e7;color:#11171c}
+@media(max-width:840px){.runtime-brand img{height:31px}.mapcontrols{gap:5px}.mapcontrols .mapbtn{padding:8px}}
+
 </style>
 </head>
 <body>
 <div id="app">
  <aside class="side">
-  <header class="head"><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V9</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
+  <header class="head"><a class="runtime-brand" href="https://runtimedivesystems.com/" target="_blank" rel="noopener" aria-label="RunTime Dive Systems website"><img src="https://runtimedivesystems.com/assets/runtime-logo.png" alt="RunTime Dive Systems" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span class="brand-fallback" hidden>RUNTIME / DIVE SYSTEMS</span></a><div class="over">RUNTIME · DIVE SYSTEMS / DPV PLANNER · V10</div><h1>Lake Washington DPV Planner</h1><p class="lead">Lake Washington wreck sites · bathymetric relief · DPV routing</p><div id="dataStatus" class="status" role="status">Loading lake wreck markers…</div></header>
   <div class="tabs"><button class="tab active" id="tabExplore">Explore wrecks</button><button class="tab" id="tabRoute">Route <span id="routeCount">(0)</span></button></div>
   <div class="body">
    <section class="pane active" id="explorePane">
@@ -91,7 +166,7 @@
     </div>
     <div class="two"><div><label for="speed" class="label">Speed (ft/min)</label><input class="input" id="speed" type="number" min="20" max="800" step="5" value="175"></div><div><label for="reserve" class="label">Extra time / stop (min)</label><input class="input" id="reserve" type="number" min="0" max="120" step="1" value="0"></div></div>
     <div class="metricgrid"><div class="metric"><label>Total distance</label><strong id="totalDist">0 ft</strong></div><div class="metric"><label>Transit time</label><strong id="totalTime">0:00</strong></div><div class="metric"><label>Legs</label><strong id="totalLegs">0</strong></div><div class="metric"><label>With stop allowance</label><strong id="withStops">0:00</strong></div></div>
-    <p class="helper">Click or tap open water to extend the route, or select a wreck in Draw mode. Drag any numbered route marker to fine-tune its position; click or right-click it to rename, classify as shore/boat, or move it by clicking the map.</p>
+    <p class="helper">With Route selected, click open water to add a waypoint. Turn on Draw Route to add wrecks directly from the map. In Explore, clicking a wreck only shows its details. Drag a numbered route marker to fine-tune it.</p>
     <div class="group"><button id="drawRoute" class="btn primary">Draw route: OFF</button><button id="undo" class="btn">Undo last</button><button id="reverse" class="btn">Reverse</button><button id="clear" class="btn danger">Clear route</button></div>
     <div id="stops"></div>
     <hr class="sep"><div class="group"><button class="btn" id="saveRoute">Save route</button><button class="btn" id="loadRoute">Load saved</button><button class="btn" id="downloadGPX">Export GPX</button><button class="btn" id="downloadCSV">Export CSV</button></div>
@@ -112,11 +187,11 @@
     <div class="group"><button id="pointMove" class="btn small primary" type="button">Move by map click</button><button id="pointRemove" class="btn small danger" type="button">Remove</button></div>
     <p class="helper">Drag a numbered route marker to fine-tune its position.</p>
    </div>
-  <div class="mapnote" id="mapMessage" role="status">Click an open spot to add a waypoint. Click a wreck for details, or enable Draw route to connect wrecks.</div>
+  <div class="mapnote" id="mapMessage" role="status">Explore shows wreck details. Select Route to place waypoints or build a route.</div>
  </main>
 </div>
 <script>
-/* RunTime DPV Planner V9. Data source and licensing details are retained in README.md. */
+/* RunTime DPV Planner V10. Data source and licensing details are retained in README.md. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const MARKERS='https://raw.githubusercontent.com/archisgore/dive-site-markers/master/markers.json';
@@ -241,8 +316,8 @@ function renderGraphics(){
  if(route.length>1){
   let poly=document.createElementNS(svg.namespaceURI,'polyline');
   poly.setAttribute('points',route.map(o=>{let p=project(o);return p.x+','+p.y}).join(' '));
-  poly.setAttribute('fill','none');poly.setAttribute('stroke','#072f33');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
-  let line=poly.cloneNode();line.setAttribute('stroke','#6ef0c1');line.setAttribute('stroke-width','4');svg.appendChild(line);
+  poly.setAttribute('fill','none');poly.setAttribute('stroke','#141b20');poly.setAttribute('stroke-width','8');poly.setAttribute('stroke-linejoin','round');svg.appendChild(poly);
+  let line=poly.cloneNode();line.setAttribute('stroke','#fafbfb');line.setAttribute('stroke-width','4');svg.appendChild(line);
   for(let i=1;i<route.length;i++){
    let a=project(route[i-1]),b=project(route[i]),x=(a.x+b.x)/2,y=(a.y+b.y)/2;
    if(x<-100||x>w+100||y<-50||y>h+50)continue;
@@ -256,7 +331,7 @@ function renderGraphics(){
   let button=create('button','pin-marker'+(isNamed(p)?' named':'')+(routed.has(p.id)?' stop':'')+(current?.id===p.id?' active':''));
   button.title=display(p)+' · '+p.id+' · '+depth(p);button.setAttribute('aria-label',button.title);
   button.style.left=a.x+'px';button.style.top=a.y+'px';button.dataset.wreckId=p.id;
-  button.addEventListener('click',e=>{e.stopPropagation();if(startMode){notify('Click open map water or use coordinates to place '+startDefault(startMode)+'.');return;}if(draw)add(p);else choose(p,false);});
+  button.addEventListener('click',e=>{e.stopPropagation();if(startMode){notify('Click open map water or use coordinates to place '+startDefault(startMode)+'.');return;}if(draw&&$('routePane').classList.contains('active'))add(p);else choose(p,false);});
   world.appendChild(button);
  }
  for(let i=0;i<route.length;i++){
@@ -265,13 +340,13 @@ function renderGraphics(){
   dot.title='Waypoint '+(i+1)+': '+display(p)+' · drag to move, click or right-click for options';
   dot.setAttribute('aria-label',dot.title);dot.style.left=a.x+'px';dot.style.top=a.y+'px';
   dot.addEventListener('pointerdown',e=>{
-   if(e.button!==0)return;
+   if(e.button!==0||$('explorePane').classList.contains('active'))return;
    e.preventDefault();e.stopPropagation();hideMenu();hoverPoint=null;
    pointDrag={index:i,pointerId:e.pointerId,x:e.clientX,y:e.clientY,moved:false,lat:p.lat,lng:p.lng};
    try{canvas.setPointerCapture(e.pointerId);}catch(err){}
   });
-  dot.addEventListener('click',e=>{e.stopPropagation();if(!pointDrag)showPointMenu(i);});
-  dot.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();showPointMenu(i);});
+  dot.addEventListener('click',e=>{e.stopPropagation();if($('explorePane').classList.contains('active')){const wreck=catalog.find(w=>w.id===p.id);if(wreck){choose(wreck,false);return;}}if(!pointDrag)showPointMenu(i);});
+  dot.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();if($('explorePane').classList.contains('active')){const wreck=catalog.find(w=>w.id===p.id);if(wreck){choose(wreck,false);return;}}showPointMenu(i);});
   dot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='F10'){e.preventDefault();showPointMenu(i);}});
   world.appendChild(dot);
   let label=create('div','point-label',String(i+1)+' '+display(p));label.style.left=a.x+'px';label.style.top=a.y+'px';world.appendChild(label);
@@ -285,13 +360,13 @@ function renderPreview(){
  const from=route[route.length-1],a=project(from),b=project(hoverPoint),d=dist(from,hoverPoint);
  const line=document.createElementNS(svg.namespaceURI,'line');
  line.setAttribute('class','preview-line');line.setAttribute('x1',a.x);line.setAttribute('y1',a.y);
- line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('stroke','#f7c778');
+ line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('stroke','#fafbfb');
  line.setAttribute('stroke-width','3');line.setAttribute('stroke-dasharray','7 6');svg.appendChild(line);
  const label=create('div','preview-label',heading(bearing(from,hoverPoint))+' · '+feet(d)+' · '+tm(d/speed()));
  label.style.left=((a.x+b.x)/2)+'px';label.style.top=((a.y+b.y)/2)+'px';world.appendChild(label);
 }
 function refresh(){hideMenu();hoverPoint=null;renderTiles();}
-function switchTab(tab){let r=tab==='route';$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;}
+function switchTab(tab){let r=tab==='route';if(!r&&draw)drawState(false);$('tabRoute').classList.toggle('active',r);$('tabExplore').classList.toggle('active',!r);$('routePane').classList.toggle('active',r);$('explorePane').classList.toggle('active',!r);document.querySelector('.body').scrollTop=0;if(!r)renderPreview();}
 function choose(w,fly=true){current=w;$('feature').classList.add('show');$('featureName').textContent=display(w);$('featureSub').textContent=w.id+' · '+depth(w)+' · '+(w.explored==='YES'?'Explored':'Unconfirmed');$('featureDesc').textContent=clean(w.desc)||'No description available';
  $('featureDetails').replaceChildren();[['GPS',w.lat.toFixed(6)+', '+w.lng.toFixed(6)],['Alias',clean(w.alias)||'—'],['Documented',w.documented||'Unknown'],['Identified',w.identified||'Unknown'],['Fragile',w.fragile||'Unknown']].forEach(([k,v])=>{$('featureDetails').append(create('span','',k),create('span','',v));});
  if(fly){center={lat:w.lat,lng:w.lng};refresh();}else renderGraphics();switchTab('explore');drawList();notify(display(w)+': details displayed. Use + Add to route to draw a leg.');}
@@ -406,7 +481,7 @@ function wire(){for(let [a,t] of [['tabExplore','explore'],['tabRoute','route']]
     const i=movingPointIndex;movingPointIndex=null;canvas.classList.remove('relocating-point');relocate(i,p.lat,p.lng);
     notify('Waypoint '+(i+1)+' moved. Bearings and distances recalculated.');
    }else if(startMode)placeStart(p.lat,p.lng);
-   else placeWaypoint(p.lat,p.lng);
+   else if($('routePane').classList.contains('active'))placeWaypoint(p.lat,p.lng);
   }
   try{canvas.releasePointerCapture(e.pointerId)}catch(err){}
  });
